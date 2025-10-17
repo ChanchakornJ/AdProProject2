@@ -17,19 +17,30 @@ public class DrawingLoop implements Runnable {
         running = true;
     }
     private void checkDrawCollisions(List<GameCharacter> gameCharacterList) {
+        // อัพเดตการชนกำแพง/พื้น
         for (GameCharacter gameCharacter : gameCharacterList) {
             gameCharacter.checkReachGameWall();
             gameCharacter.checkReachHighest();
             gameCharacter.checkReachFloor();
         }
-        GameCharacter cA = gameCharacterList.get(0);
-        GameCharacter cB = gameCharacterList.get(1);
-        if (cA.getBoundsInParent().intersects(cB.getBoundsInParent())) {
-            if (cA.collided(cB) == false) {
-                cB.collided(cA);
+
+        // สมมุติ player อยู่ index 0 เสมอ
+        if (gameCharacterList.size() > 0) {
+            GameCharacter player = gameCharacterList.get(0);
+
+            // เช็ค player vs enemies/boss
+            for (int i = 1; i < gameCharacterList.size(); i++) {
+                GameCharacter other = gameCharacterList.get(i);
+
+                if (player.getBoundsInParent().intersects(other.getBoundsInParent())) {
+                    if (!player.collided(other)) {
+                        other.collided(player);
+                    }
+                }
             }
         }
     }
+
     private void paint(List<GameCharacter> gameCharacterList) {
         for (GameCharacter gameCharacter : gameCharacterList) {
             gameCharacter.repaint();

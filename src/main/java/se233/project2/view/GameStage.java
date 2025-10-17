@@ -28,7 +28,7 @@ public class GameStage extends Pane {
         ImageView backgroundImg = new ImageView(gameStageImg);
         backgroundImg.setFitHeight(HEIGHT);
         backgroundImg.setFitWidth(WIDTH);
-        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 10, 10, 1, 65, 64, KeyCode.A, KeyCode.D, KeyCode.W));
+        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 10, 10, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP));
         scoreList.add(new Score(30, GROUND + 30));
         scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
         getChildren().add(backgroundImg);

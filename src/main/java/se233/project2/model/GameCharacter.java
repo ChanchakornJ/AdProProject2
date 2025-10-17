@@ -4,12 +4,15 @@ package se233.project2.model;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import se233.project2.Launcher;
 import se233.project2.view.GameStage;
 
 import java.util.concurrent.TimeUnit;
 
 public class GameCharacter extends Pane {
+    private static final Logger logger = LogManager.getLogger(GameCharacter.class);
     private Image characterImg;
     private AnimatedSprite imageView;
     private int x;
@@ -66,7 +69,9 @@ public class GameCharacter extends Pane {
     public void stop() {
         isMoveLeft = false;
         isMoveRight = false;
+        xVelocity = 0;
     }
+
     public void moveX() {
         setTranslateX(x);
         if(isMoveLeft) {
@@ -120,6 +125,8 @@ public class GameCharacter extends Pane {
     public void repaint() {
         moveX();
         moveY();
+
+        trace();
     }
     public boolean collided(GameCharacter c) {
         if (this.isMoveLeft && this.x > c.getX()) {
@@ -213,4 +220,9 @@ public class GameCharacter extends Pane {
     public void setX(int x) {
         this.x = x;
     }
+
+    public void trace(){
+        logger.info(String.format("x:%d y:%d vx:%d vy:%d", x, y, xVelocity, yVelocity));
+    }
+
 }

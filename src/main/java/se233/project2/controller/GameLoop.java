@@ -1,5 +1,6 @@
 package se233.project2.controller;
 
+import javafx.application.Platform;
 import se233.project2.model.GameCharacter;
 import se233.project2.view.GameStage;
 import se233.project2.view.Score;
@@ -13,34 +14,34 @@ public class GameLoop implements Runnable {
     private boolean running;
     public GameLoop(GameStage gameStage) {
         this.gameStage = gameStage;
-        frameRate = 10;
+        frameRate = 20;
         interval = 1000.0f / frameRate;
         running = true;
     }
     private void update(List<GameCharacter> gameCharacterList) {
-
         for (GameCharacter gameCharacter : gameCharacterList) {
             boolean leftPressed = gameStage.getKeys().isPressed(gameCharacter.getLeftKey());
             boolean rightPressed = gameStage.getKeys().isPressed(gameCharacter.getRightKey());
             boolean upPressed = gameStage.getKeys().isPressed(gameCharacter.getUpKey());
 
-            if (leftPressed && rightPressed) {
-                gameCharacter.stop();
-            } else if (leftPressed) {
+            if (leftPressed && rightPressed) gameCharacter.stop();
+            else if (leftPressed) {
                 gameCharacter.getImageView().tick();
                 gameCharacter.moveLeft();
-            } else if (rightPressed) {
+            }
+            else if (rightPressed) {
                 gameCharacter.getImageView().tick();
                 gameCharacter.moveRight();
-            } else {
-                gameCharacter.stop();
             }
+            else gameCharacter.stop();
 
-            if (upPressed) {
-                gameCharacter.jump();
-            }
+            if (upPressed) gameCharacter.jump();
+
+            // เรียก update position + repaint UI
+            Platform.runLater(() -> gameCharacter.repaint());
         }
     }
+
 //    private void updateScore(List<Score> scoreList, List<GameCharacter>
 //            gameCharacterList) {
 //        javafx.application.Platform.runLater(() -> {

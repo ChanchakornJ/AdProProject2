@@ -20,6 +20,7 @@ public class Launcher extends Application {
         primaryStage.setTitle("2D Platformer");
         primaryStage.setScene(scene);
         primaryStage.show();
+        gameStage.requestFocus();
         (new Thread(gameLoop)).start();
         (new Thread(drawingLoop)).start();
     }
