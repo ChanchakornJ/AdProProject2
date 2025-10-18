@@ -1,80 +1,62 @@
 package se233.project2.controller;
 
-import javafx.application.Platform;
+import javafx.animation.AnimationTimer;
 import se233.project2.model.GameCharacter;
 import se233.project2.view.GameStage;
-import se233.project2.view.Score;
 
 import java.util.List;
 
-public class GameLoop implements Runnable {
-    private GameStage gameStage;
-    private int frameRate;
-    private float interval;
-    private boolean running;
+public class GameLoop {
+    private final GameStage gameStage;
+    private final AnimationTimer timer;
+
     public GameLoop(GameStage gameStage) {
         this.gameStage = gameStage;
-        frameRate = 20;
-        interval = 1000.0f / frameRate;
-        running = true;
+        this.timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update(gameStage.getGameCharacterList());
+                checkCollisions(gameStage.getGameCharacterList());
+                paint(gameStage.getGameCharacterList());
+            }
+        };
     }
-    private void update(List<GameCharacter> gameCharacterList) {
-        for (GameCharacter gameCharacter : gameCharacterList) {
-            boolean leftPressed = gameStage.getKeys().isPressed(gameCharacter.getLeftKey());
-            boolean rightPressed = gameStage.getKeys().isPressed(gameCharacter.getRightKey());
-            boolean upPressed = gameStage.getKeys().isPressed(gameCharacter.getUpKey());
 
-            if (leftPressed && rightPressed) gameCharacter.stop();
-            else if (leftPressed) {
-                gameCharacter.getImageView().tick();
-                gameCharacter.moveLeft();
+    public void start() { timer.start(); }
+    public void stop() { timer.stop(); }
+
+    private void update(List<GameCharacter> list) {
+        for (GameCharacter c : list) {
+            boolean left = gameStage.getKeys().isPressed(c.getLeftKey());
+            boolean right = gameStage.getKeys().isPressed(c.getRightKey());
+            boolean up = gameStage.getKeys().isPressed(c.getUpKey());
+
+            if (left && right) c.stop();
+            else if (left) {
+                c.getImageView().tick();
+                c.moveLeft();
+            } else if (right) {
+                c.getImageView().tick();
+                c.moveRight();
+            } else {
+                c.stop();
             }
-            else if (rightPressed) {
-                gameCharacter.getImageView().tick();
-                gameCharacter.moveRight();
-            }
-            else gameCharacter.stop();
 
-            if (upPressed) gameCharacter.jump();
-
-            // เรียก update position + repaint UI
-            // update position
-            gameCharacter.moveX();
-            gameCharacter.moveY();
-
-            // ตรวจสอบ platform
-            gameCharacter.checkPlatforms(gameStage.getPlatforms());
-            gameCharacter.repaint();
+            if (up) c.jump();
         }
     }
 
-//    private void updateScore(List<Score> scoreList, List<GameCharacter>
-//            gameCharacterList) {
-//        javafx.application.Platform.runLater(() -> {
-//            for (int i=0 ; i<scoreList.size() ; i++) {
-//                scoreList.get(i).setPoint(gameCharacterList.get(i).getScore());
-//            } });
-//    }
-    @Override
-    public void run() {
-        while (running) {
-            float time = System.currentTimeMillis();
-            update(gameStage.getGameCharacterList());
-//            updateScore(gameStage.getScoreList(), gameStage.getGameCharacterList());
-            time = System.currentTimeMillis() - time;
-            if (time < interval) {
-                try {
-                    Thread.sleep((long) (interval - time));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    Thread.sleep((long) (interval - (interval % time)));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+    private void checkCollisions(List<GameCharacter> list) {
+        for (GameCharacter g : list) {
+            g.checkReachGameWall();
+            g.checkReachHighest();
+            g.checkReachFloor();
+        }
+    }
+
+    private void paint(List<GameCharacter> list) {
+        for (GameCharacter g : list) {
+            g.repaint(); // update translateX/Y and visuals once per frame
         }
     }
 }

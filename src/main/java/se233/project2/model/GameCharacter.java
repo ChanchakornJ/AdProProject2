@@ -32,12 +32,15 @@ public class GameCharacter extends Pane {
     int xAcceleration = 1;
     int yAcceleration = 1;
     int xMaxVelocity = 7;
-    int yMaxVelocity = 17;
+    int yMaxVelocity = 16;
     boolean isMoveLeft = false;
     boolean isMoveRight = false;
     boolean isFalling = true;
     boolean canJump = false;
     boolean isJumping = false;
+    private int lastX;
+    private int lastY;
+
 
     public GameCharacter(int id, int x, int y, String imgName, int count, int column, int row, int width, int height, KeyCode leftKey, KeyCode rightKey, KeyCode upKey) {
         this.x = x;
@@ -55,6 +58,7 @@ public class GameCharacter extends Pane {
         this.leftKey = leftKey;
         this.rightKey = rightKey;
         this.upKey = upKey;
+
         this.getChildren().addAll(this.imageView);
         setScaleX(id % 2 * 2 - 1);
     }
@@ -103,11 +107,14 @@ public class GameCharacter extends Pane {
         }
     }
     public void jump() {
+        System.out.println("Trying to jump. canJump=" + canJump + ", isJumping=" + isJumping);
         if (canJump) {
             yVelocity = yMaxVelocity;
             canJump = false;
             isJumping = true;
             isFalling = false;
+            System.out.println("Jump started!");
+
         }
     }
     public void checkReachHighest () {
@@ -127,7 +134,11 @@ public class GameCharacter extends Pane {
     }
     public void checkPlatforms(List<Platform> platforms) {
         if (platforms == null) return;
+        boolean onSomething = false;
+
         for (Platform p : platforms) {
+            if (platforms == null) return;
+            if (isJumping) return;
             // ถ้าตัวละครอยู่เหนือ platform และกำลังตกลงมา
             if (this.y + this.characterHeight <= p.getY() &&
                     this.y + this.characterHeight + yVelocity >= p.getY() &&
@@ -144,7 +155,9 @@ public class GameCharacter extends Pane {
         }
 
         // ถ้าไม่ชน platform ใด ๆ เลย
-        this.isFalling = true;
+        if (!onSomething && !isJumping) {
+            this.isFalling = true;
+        }
     }
 
 
@@ -153,7 +166,7 @@ public class GameCharacter extends Pane {
         moveY();
         checkPlatforms(platforms);
         checkReachHighest();
-//        checkReachFloor();
+        checkReachFloor();
         checkReachGameWall();
         trace();
     }
@@ -251,8 +264,17 @@ public class GameCharacter extends Pane {
     }
 
     public void trace(){
-        logger.info(String.format("x:%d y:%d vx:%d vy:%d", x, y, xVelocity, yVelocity));
-        System.out.println("x=" + x + " y=" + y + " vx=" + xVelocity + " vy=" + yVelocity);
+        if (x != lastX || y != lastY) {  // ✅ only log when position changes
+            logger.info("Moved to x:{} y:{} (vx={}, vy={})", x, y, xVelocity, yVelocity);
+            lastX = x;
+            lastY = y;
+        }
+//        logger.info(String.format("x:%d y:%d vx:%d vy:%d", x, y, xVelocity, yVelocity));
+//        System.out.println("x=" + x + " y=" + y + " vx=" + xVelocity + " vy=" + yVelocity);
     }
+    public void setPlatforms(List<Platform> platforms) {
+        this.platforms = platforms;
+    }
+
 
 }

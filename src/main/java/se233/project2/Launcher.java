@@ -13,7 +13,6 @@ public class Launcher extends Application {
     public void start(Stage primaryStage) {
         GameStage gameStage = new GameStage();
         GameLoop gameLoop = new GameLoop(gameStage);
-        DrawingLoop drawingLoop = new DrawingLoop(gameStage);
         Scene scene = new Scene(gameStage, gameStage.WIDTH, gameStage.HEIGHT);
         scene.setOnKeyPressed(event-> gameStage.getKeys().add(event.getCode()));
         scene.setOnKeyReleased(event ->  gameStage.getKeys().remove(event.getCode()));
@@ -21,8 +20,6 @@ public class Launcher extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         gameStage.requestFocus();
-        (new Thread(gameLoop)).start();
-        (new Thread(drawingLoop)).start();
-    }
+        gameLoop.start();     }
 
 }

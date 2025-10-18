@@ -25,8 +25,11 @@ public class GameStage extends Pane {
     public GameStage() {
         platforms = new ArrayList<>();
         platforms.add(new Platform(0, GameStage.HEIGHT - 50, GameStage.WIDTH, 20)); // ground
-        platforms.add(new Platform(100, 400, 200, 20)); // floating platform
-        platforms.add(new Platform(350, 300, 150, 20)); // another platform
+        platforms.add(new Platform(0, 170, 150, 40));
+        platforms.add(new Platform(0, 260, 150, 40));
+        platforms.add(new Platform(150, 230, 100, 100));
+        platforms.add(new Platform(300, 300, 80, 15));
+
 
         for (Platform p : platforms) {
             javafx.scene.shape.Rectangle rect =
@@ -42,7 +45,8 @@ public class GameStage extends Pane {
         ImageView backgroundImg = new ImageView(gameStageImg);
         backgroundImg.setFitHeight(HEIGHT);
         backgroundImg.setFitWidth(WIDTH);
-        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 10, 10, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP));
+        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP));
+        gameCharacterList.get(0).setPlatforms(platforms);
         scoreList.add(new Score(30, GROUND + 30));
         scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
         getChildren().add(backgroundImg);
