@@ -9,10 +9,12 @@ import org.apache.logging.log4j.Logger;
 import se233.project2.Launcher;
 import se233.project2.view.GameStage;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GameCharacter extends Pane {
     private static final Logger logger = LogManager.getLogger(GameCharacter.class);
+    private List<Platform> platforms;
     private Image characterImg;
     private AnimatedSprite imageView;
     private int x;
@@ -57,12 +59,12 @@ public class GameCharacter extends Pane {
         setScaleX(id % 2 * 2 - 1);
     }
     public void moveLeft() {
-        setScaleX(1);
+        setScaleX(-1);
         isMoveLeft = true;
         isMoveRight = false;
     }
     public void moveRight() {
-        setScaleX(-1);
+        setScaleX(1);
         isMoveLeft = false;
         isMoveRight = true;
     }
@@ -117,15 +119,42 @@ public class GameCharacter extends Pane {
     }
     public void checkReachFloor() {
         if(isFalling && y >= GameStage.GROUND - this.characterHeight) {
+            y = GameStage.GROUND - this.characterHeight;
             isFalling = false;
             canJump = true;
             yVelocity = 0;
         }
     }
+    public void checkPlatforms(List<Platform> platforms) {
+        if (platforms == null) return;
+        for (Platform p : platforms) {
+            // ถ้าตัวละครอยู่เหนือ platform และกำลังตกลงมา
+            if (this.y + this.characterHeight <= p.getY() &&
+                    this.y + this.characterHeight + yVelocity >= p.getY() &&
+                    this.x + this.characterWidth > p.getX() &&
+                    this.x < p.getX() + p.getWidth()) {
+
+                // วางตัวละครไว้บน platform
+                this.y = p.getY() - this.characterHeight;
+                this.isFalling = false;
+                this.canJump = true;
+                this.yVelocity = 0;
+                return;
+            }
+        }
+
+        // ถ้าไม่ชน platform ใด ๆ เลย
+        this.isFalling = true;
+    }
+
+
     public void repaint() {
         moveX();
         moveY();
-
+        checkPlatforms(platforms);
+        checkReachHighest();
+//        checkReachFloor();
+        checkReachGameWall();
         trace();
     }
     public boolean collided(GameCharacter c) {
@@ -223,6 +252,7 @@ public class GameCharacter extends Pane {
 
     public void trace(){
         logger.info(String.format("x:%d y:%d vx:%d vy:%d", x, y, xVelocity, yVelocity));
+        System.out.println("x=" + x + " y=" + y + " vx=" + xVelocity + " vy=" + yVelocity);
     }
 
 }

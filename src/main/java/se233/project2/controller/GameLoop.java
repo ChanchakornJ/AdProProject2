@@ -38,7 +38,13 @@ public class GameLoop implements Runnable {
             if (upPressed) gameCharacter.jump();
 
             // เรียก update position + repaint UI
-            Platform.runLater(() -> gameCharacter.repaint());
+            // update position
+            gameCharacter.moveX();
+            gameCharacter.moveY();
+
+            // ตรวจสอบ platform
+            gameCharacter.checkPlatforms(gameStage.getPlatforms());
+            gameCharacter.repaint();
         }
     }
 
