@@ -5,12 +5,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import se233.project2.Launcher;
+import se233.project2.model.BulletManager;
 import se233.project2.model.GameCharacter;
 import se233.project2.model.Keys;
 import se233.project2.model.Platform;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class GameStage extends Pane {
     public static final int WIDTH = 800;
@@ -21,14 +24,17 @@ public class GameStage extends Pane {
     private List<Score> scoreList;
     private Keys keys;
     private List<Platform> platforms;
+    private BulletManager bulletManager
+            ;
+
 
     public GameStage() {
         platforms = new ArrayList<>();
-        platforms.add(new Platform(0, GameStage.HEIGHT - 50, GameStage.WIDTH, 20)); // ground
-        platforms.add(new Platform(0, 170, 150, 40));
-        platforms.add(new Platform(0, 260, 150, 40));
-        platforms.add(new Platform(150, 230, 100, 100));
-        platforms.add(new Platform(300, 300, 80, 15));
+        platforms.add(new Platform(0, 320, 500, 100)); // ground
+        platforms.add(new Platform(0, 150, 150, 40));
+        platforms.add(new Platform(0, 240, 150, 40));
+        platforms.add(new Platform(180, 220, 40, 100));
+        platforms.add(new Platform(310, 280, 40, 15));
 
 
         for (Platform p : platforms) {
@@ -45,14 +51,20 @@ public class GameStage extends Pane {
         ImageView backgroundImg = new ImageView(gameStageImg);
         backgroundImg.setFitHeight(HEIGHT);
         backgroundImg.setFitWidth(WIDTH);
-        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP));
+        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE));
         gameCharacterList.get(0).setPlatforms(platforms);
         scoreList.add(new Score(30, GROUND + 30));
         scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
         getChildren().add(backgroundImg);
         getChildren().addAll(gameCharacterList);
-        getChildren().addAll(scoreList);
+        bulletManager = new BulletManager(this);
+        gameCharacterList.get(0).setBulletManager(bulletManager);
+
+
+
+
     }
+
 
     public List<GameCharacter> getGameCharacterList() {
 
@@ -70,6 +82,13 @@ public class GameStage extends Pane {
     public List<Platform> getPlatforms() {
         return platforms;
     }
+    public BulletManager getBulletManager() {
+        return bulletManager;
+    }
+
+
+
+
 }
 
 

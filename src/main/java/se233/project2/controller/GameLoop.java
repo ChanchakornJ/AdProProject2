@@ -3,6 +3,8 @@ package se233.project2.controller;
 import javafx.animation.AnimationTimer;
 import se233.project2.model.GameCharacter;
 import se233.project2.view.GameStage;
+import se233.project2.model.BulletManager;
+
 
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class GameLoop {
             boolean left = gameStage.getKeys().isPressed(c.getLeftKey());
             boolean right = gameStage.getKeys().isPressed(c.getRightKey());
             boolean up = gameStage.getKeys().isPressed(c.getUpKey());
+            boolean shoot = gameStage.getKeys().isPressed(c.getShootKey());
 
             if (left && right) c.stop();
             else if (left) {
@@ -43,7 +46,13 @@ public class GameLoop {
             }
 
             if (up) c.jump();
+            if (left) c.setFacingRight(false);
+            if (right) c.setFacingRight(true);
+            if (shoot) c.shoot();
+
         }
+        gameStage.getBulletManager().update();
+
     }
 
     private void checkCollisions(List<GameCharacter> list) {

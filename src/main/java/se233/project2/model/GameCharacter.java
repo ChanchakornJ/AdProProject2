@@ -9,8 +9,11 @@ import org.apache.logging.log4j.Logger;
 import se233.project2.Launcher;
 import se233.project2.view.GameStage;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 
 public class GameCharacter extends Pane {
     private static final Logger logger = LogManager.getLogger(GameCharacter.class);
@@ -27,6 +30,7 @@ public class GameCharacter extends Pane {
     private KeyCode leftKey;
     private KeyCode rightKey;
     private KeyCode upKey;
+    private KeyCode shootKey;
     int xVelocity = 0;
     int yVelocity = 0;
     int xAcceleration = 1;
@@ -41,8 +45,17 @@ public class GameCharacter extends Pane {
     private int lastX;
     private int lastY;
 
+    //Bullet
+    private List<Bullet> bullets = new ArrayList<>();
+    private double bulletSpeed = 5.0;
+    private boolean facingRight = true;
+    private BulletManager bulletManager;
+    private long lastShotTime = 0;
+    private static final long SHOOT_COOLDOWN = 100_000_000; // 0.1 second = 100 million nanoseconds
 
-    public GameCharacter(int id, int x, int y, String imgName, int count, int column, int row, int width, int height, KeyCode leftKey, KeyCode rightKey, KeyCode upKey) {
+
+
+    public GameCharacter(int id, int x, int y, String imgName, int count, int column, int row, int width, int height, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode shootKey) {
         this.x = x;
         this.y = y;
         this.startX = x;
@@ -53,12 +66,12 @@ public class GameCharacter extends Pane {
         this.characterHeight = height;
         this.characterImg = new Image(Launcher.class.getResourceAsStream(imgName));
         this.imageView = new AnimatedSprite(characterImg, count, column, row, 0, 0, width, height);
-        this.imageView.setFitWidth((int) (width * 1.2));
-        this.imageView.setFitHeight((int) (height * 1.2));
+        this.imageView.setFitWidth((int) (width * 2));
+        this.imageView.setFitHeight((int) (height * 2));
         this.leftKey = leftKey;
         this.rightKey = rightKey;
         this.upKey = upKey;
-
+        this.shootKey = shootKey;
         this.getChildren().addAll(this.imageView);
         setScaleX(id % 2 * 2 - 1);
     }
@@ -222,6 +235,11 @@ public class GameCharacter extends Pane {
 
         return upKey;
     }
+
+    public KeyCode getShootKey() {
+        return shootKey;
+    }
+
     public AnimatedSprite getImageView() {
 
         return imageView;
@@ -264,7 +282,7 @@ public class GameCharacter extends Pane {
     }
 
     public void trace(){
-        if (x != lastX || y != lastY) {  // ✅ only log when position changes
+        if (x != lastX || y != lastY) {
             logger.info("Moved to x:{} y:{} (vx={}, vy={})", x, y, xVelocity, yVelocity);
             lastX = x;
             lastY = y;
@@ -277,4 +295,38 @@ public class GameCharacter extends Pane {
     }
 
 
+
+    public void setBulletManager(BulletManager manager) {
+        this.bulletManager = manager;
+    }
+
+    public void shoot() {
+        if (bulletManager == null) return;
+
+        long now = System.nanoTime();
+        if (now - lastShotTime < SHOOT_COOLDOWN) {
+            return;
+        }
+        lastShotTime = now;
+
+        double startX = getTranslateX() + (facingRight ? characterWidth : 0);
+        double startY = getTranslateY() + characterHeight / 2.0;
+        bulletManager.shoot(startX, startY, facingRight);
+    }
+
+
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
+    }
+
+    public boolean isFacingRight() {
+        return facingRight;
+    }
+
+
+
+
 }
+
+
+

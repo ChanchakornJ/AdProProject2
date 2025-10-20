@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class AnimatedSprite extends ImageView {
+    private int frameDelay = 6;
+    private int frameCounter = 0;
     int count, columns, rows, offsetX, offsetY, width, height, curIndex, curColumnIndex = 0, curRowIndex = 0;
     public AnimatedSprite(Image image, int count, int columns, int rows, int offsetX, int offsetY, int width, int height) {
         this.setImage(image);
@@ -19,9 +21,13 @@ public class AnimatedSprite extends ImageView {
         this.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
     }
     public void tick() {
+        frameCounter++;
+        if (frameCounter < frameDelay) return;
+        frameCounter = 0;
+
         curColumnIndex = curIndex % columns;
         curRowIndex = curIndex / columns;
-        curIndex = (curIndex+1) % (columns * rows);
+        curIndex = (curIndex + 1) % (columns * rows);
         curIndex = curIndex < count ? curIndex : 0;
         interpolate();
     }
