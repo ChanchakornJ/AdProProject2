@@ -51,7 +51,7 @@ public class GameCharacter extends Pane {
     private boolean facingRight = true;
     private BulletManager bulletManager;
     private long lastShotTime = 0;
-    private static final long SHOOT_COOLDOWN = 100_000_000; // 0.1 second = 100 million nanoseconds
+    private static final long SHOOT_COOLDOWN = 200_000_000; // 0.1 second = 100 million nanoseconds
 
 
 
