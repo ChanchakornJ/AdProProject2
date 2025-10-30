@@ -1,9 +1,11 @@
 package se233.project2.controller;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.image.ImageView;
+import se233.project2.model.Boss;
 import se233.project2.model.GameCharacter;
 import se233.project2.view.GameStage;
-import se233.project2.model.BulletManager;
 
 
 import java.util.List;
@@ -52,6 +54,8 @@ public class GameLoop {
 
         }
         gameStage.getBulletManager().update();
+        checkBulletBossCollision(gameStage);
+
 
     }
 
@@ -68,4 +72,24 @@ public class GameLoop {
             g.repaint(); // update translateX/Y and visuals once per frame
         }
     }
+    private void checkBulletBossCollision(GameStage gameStage) {
+        Boss boss = gameStage.getBoss();
+        for (ImageView bullet : gameStage.getBulletManager().getBullets()) {
+            Rectangle2D bossBox = boss.getHitBox();
+            Rectangle2D bulletBox = new Rectangle2D(
+                    bullet.getX(),
+                    bullet.getY(),
+                    bullet.getFitWidth(),
+                    bullet.getFitHeight()
+            );
+
+            if (bossBox.intersects(bulletBox)) {
+                boss.takeDamage();
+                gameStage.getBulletManager().removeBullet(bullet);
+                break;
+            }
+        }
+    }
+
+
 }

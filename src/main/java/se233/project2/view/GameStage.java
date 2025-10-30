@@ -5,7 +5,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import se233.project2.Launcher;
-import se233.project2.model.BulletManager;
+import se233.project2.controller.BulletManager;
+import se233.project2.model.Boss;
 import se233.project2.model.GameCharacter;
 import se233.project2.model.Keys;
 import se233.project2.model.Platform;
@@ -24,8 +25,9 @@ public class GameStage extends Pane {
     private List<Score> scoreList;
     private Keys keys;
     private List<Platform> platforms;
-    private BulletManager bulletManager
-            ;
+    private BulletManager bulletManager;
+    private Boss boss;
+
 
 
     public GameStage() {
@@ -53,16 +55,22 @@ public class GameStage extends Pane {
         backgroundImg.setFitWidth(WIDTH);
         gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE));
         gameCharacterList.get(0).setPlatforms(platforms);
+        boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss1.png");
         scoreList.add(new Score(30, GROUND + 30));
         scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
         getChildren().add(backgroundImg);
         getChildren().addAll(gameCharacterList);
+        getChildren().add(boss);
+        boss.toFront();
         bulletManager = new BulletManager(this);
         gameCharacterList.get(0).setBulletManager(bulletManager);
 
 
 
 
+    }
+    public Boss getBoss() {
+        return boss;
     }
 
 
@@ -90,5 +98,4 @@ public class GameStage extends Pane {
 
 
 }
-
 

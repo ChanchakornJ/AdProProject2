@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import se233.project2.controller.DrawingLoop;
 import se233.project2.controller.GameLoop;
+import se233.project2.model.Boss;
 import se233.project2.view.GameStage;
 
 public class Launcher extends Application {
@@ -21,5 +22,6 @@ public class Launcher extends Application {
         primaryStage.show();
         gameStage.requestFocus();
         gameLoop.start();     }
+
 
 }
