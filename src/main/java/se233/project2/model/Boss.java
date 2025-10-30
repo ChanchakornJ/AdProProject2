@@ -41,8 +41,11 @@ public class Boss extends Pane {
         if (x < 400 || x > 700) speed *= -1; // patrol
     }
     public Rectangle2D getHitBox() {
-        return new Rectangle2D(getTranslateX(), getTranslateY(), w-10, h);
-    }
+        double hitX = getTranslateX() + w * 0.25;
+        double hitY = getTranslateY() + h * 0.3;
+        double hitW = w * 0.5;
+        double hitH = h * 0.4;
+        return new Rectangle2D(hitX, hitY, hitW, hitH);    }
 
 
     void draw(GraphicsContext gc) {
@@ -59,11 +62,20 @@ public class Boss extends Pane {
     }
     public void die() {
         alive = false;
-        ImageView explosion = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Stage1Pathway.png")));
-        explosion.setX(400);
-        explosion.setY(300);
-        ((Pane)getParent()).getChildren().add(explosion);
+
+        if (getParent() instanceof Pane parent) {
+            parent.getChildren().remove(this);
+
+            ImageView explosion = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Stage1Pathway.png"))
+            );
+            explosion.setX(getTranslateX());
+            explosion.setY(getTranslateY());
+            parent.getChildren().add(explosion);
+        } else {
+            System.err.println("Boss has no parent when dying!");
+        }
     }
+
 
 
 

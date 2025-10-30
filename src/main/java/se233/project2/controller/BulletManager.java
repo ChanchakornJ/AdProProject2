@@ -15,11 +15,20 @@ public class BulletManager {
     private final Image bulletImg = new Image(Launcher.class.getResourceAsStream("assets/Bullet.png"));
     private final double bulletSpeed = 6;
 
+    public static class BulletMeta {
+        public double speed;
+        public boolean fromPlayer;
+        public BulletMeta(double speed, boolean fromPlayer) {
+            this.speed = speed;
+            this.fromPlayer = fromPlayer;
+        }
+    }
+
     public BulletManager(Pane root) {
         this.root = root;
     }
 
-    public void shoot(double startX, double startY, boolean facingRight) {
+    public void shoot(double startX, double startY, boolean facingRight, boolean fromPlayer) {
         ImageView bullet = new ImageView(bulletImg);
         bullet.setFitWidth(10);
         bullet.setFitHeight(5);
@@ -27,15 +36,17 @@ public class BulletManager {
         bullet.setY(startY);
         root.getChildren().add(bullet);
         bullets.add(bullet);
-        bullet.setUserData(facingRight ? bulletSpeed : -bulletSpeed);
+
+        double speed = facingRight ? bulletSpeed : -bulletSpeed;
+        bullet.setUserData(new BulletMeta(speed, fromPlayer));
     }
 
     public void update() {
         Iterator<ImageView> it = bullets.iterator();
         while (it.hasNext()) {
             ImageView b = it.next();
-            double speed = (double) b.getUserData();
-            b.setX(b.getX() + speed);
+            BulletMeta meta = (BulletMeta) b.getUserData();
+            b.setX(b.getX() + meta.speed);
 
             if (b.getX() < 0 || b.getX() > root.getWidth()) {
                 root.getChildren().remove(b);
@@ -43,11 +54,11 @@ public class BulletManager {
             }
         }
     }
+
     public void removeBullet(ImageView b) {
         root.getChildren().remove(b);
         bullets.remove(b);
     }
-
 
     public List<ImageView> getBullets() {
         return bullets;
