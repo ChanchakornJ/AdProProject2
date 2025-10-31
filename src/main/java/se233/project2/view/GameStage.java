@@ -6,10 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
-import se233.project2.model.Boss;
-import se233.project2.model.GameCharacter;
-import se233.project2.model.Keys;
-import se233.project2.model.Platform;
+import se233.project2.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +24,21 @@ public class GameStage extends Pane {
     private List<Platform> platforms;
     private BulletManager bulletManager;
     private Boss boss;
+    private List<Minion> minions;
+
 
 
 
     public GameStage() {
+        gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
+        ImageView backgroundImg = new ImageView(gameStageImg);
+        backgroundImg.setFitHeight(HEIGHT);
+        backgroundImg.setFitWidth(WIDTH);
+        gameCharacterList = new ArrayList<>();
+        scoreList = new ArrayList<>();
+        platforms = new ArrayList<>();
+        minions = new ArrayList<>();
+        keys = new Keys();
         platforms = new ArrayList<>();
         platforms.add(new Platform(0, 320, 500, 100)); // ground
         platforms.add(new Platform(0, 150, 150, 40));
@@ -46,24 +54,26 @@ public class GameStage extends Pane {
             this.getChildren().add(rect);
         }
 
-        gameCharacterList = new ArrayList<>();
-        scoreList = new ArrayList();
-        keys = new Keys();
-        gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
-        ImageView backgroundImg = new ImageView(gameStageImg);
-        backgroundImg.setFitHeight(HEIGHT);
-        backgroundImg.setFitWidth(WIDTH);
-        gameCharacterList.add(new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE));
+        gameCharacterList.add(new GameCharacter(
+                0, 30, 30,
+                "assets/Character.png",
+                6, 6, 1, 65, 64,
+                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
+        ));
         gameCharacterList.get(0).setPlatforms(platforms);
-        boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss1.png");
+
+        bulletManager = new BulletManager(this);
+        gameCharacterList.get(0).setBulletManager(bulletManager);
+        minions.add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", bulletManager));
+
+
+        boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss1.png", bulletManager);
         scoreList.add(new Score(30, GROUND + 30));
         scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
         getChildren().add(backgroundImg);
         getChildren().addAll(gameCharacterList);
         getChildren().add(boss);
-        boss.toFront();
-        bulletManager = new BulletManager(this);
-        gameCharacterList.get(0).setBulletManager(bulletManager);
+        getChildren().addAll(minions);
 
 
 
@@ -93,6 +103,29 @@ public class GameStage extends Pane {
     public BulletManager getBulletManager() {
         return bulletManager;
     }
+    public List<Minion> getMinions() { return minions; }
+
+    public static GameStage stage1() {
+        return new GameStage(); 
+    }
+
+    public static GameStage stage2() {
+        GameStage stage2 = new GameStage();
+        stage2.getChildren().clear();
+
+        stage2.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
+        ImageView bg = new ImageView(stage2.gameStageImg);
+        bg.setFitWidth(WIDTH);
+        bg.setFitHeight(HEIGHT);
+        stage2.getChildren().add(bg);
+
+        // rebuild entities
+        stage2.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage2.getBulletManager());
+        stage2.getChildren().add(stage2.boss);
+
+        return stage2;
+    }
+
 
 
 

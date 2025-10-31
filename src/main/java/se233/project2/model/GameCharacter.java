@@ -44,6 +44,8 @@ public class GameCharacter extends Pane {
     public boolean isJumping = false;
     private int lastX;
     private int lastY;
+    private int hp = 5;
+    private int lives = 3;
 
     //Bullet
     private List<Bullet> bullets = new ArrayList<>();
@@ -90,6 +92,7 @@ public class GameCharacter extends Pane {
         isMoveRight = false;
         xVelocity = 0;
     }
+
 
     public void moveX() {
         setTranslateX(x);
@@ -184,6 +187,8 @@ public class GameCharacter extends Pane {
         trace();
     }
     public boolean collided(GameCharacter c) {
+        if (this == c) return false;
+
         if (this.isMoveLeft && this.x > c.getX()) {
             this.x = Math.max(this.x, c.getX() + c.getCharacterWidth());
             this.stop();
@@ -191,6 +196,7 @@ public class GameCharacter extends Pane {
             this.x = Math.min(this.x, c.getX() - this.characterWidth);
             this.stop();
         }
+
         if (this.isFalling && this.y < c.getY()) {
             score++;
             this.y = Math.min(GameStage.GROUND - this.characterHeight, c.getY());
@@ -201,9 +207,12 @@ public class GameCharacter extends Pane {
         }
         return false;
     }
+
     public void collapsed() {
-        this.imageView.setFitHeight(5);
-        this.y = this.y + this.characterHeight - 5;
+        this.imageView.setFitWidth((int) (this.getWidth() * 2));
+        this.imageView.setFitHeight((int) (this.getHeight() * 2));
+        this.y = 5;
+
         this.repaint();
         try {
             TimeUnit.MILLISECONDS.sleep(300);
@@ -215,8 +224,8 @@ public class GameCharacter extends Pane {
     public void respawn() {
         this.x = this.startX;
         this.y = this.startY;
-        this.imageView.setFitWidth(this.characterWidth);
-        this.imageView.setFitHeight(this.characterHeight);
+        this.imageView.setFitWidth(this.characterWidth * 2);
+        this.imageView.setFitHeight(this.characterHeight * 2);
         this.isMoveLeft = false;
         this.isMoveRight = false;
         this.isFalling = true;
@@ -311,17 +320,25 @@ public class GameCharacter extends Pane {
 
         double startX = getTranslateX() + (facingRight ? characterWidth : 0);
         double startY = getTranslateY() + characterHeight / 2.0;
-        bulletManager.shoot(startX, startY, facingRight);
+        bulletManager.shoot(startX, startY, facingRight, true);
     }
 
 
     public void setFacingRight(boolean facingRight) {
         this.facingRight = facingRight;
     }
-
-    public boolean isFacingRight() {
-        return facingRight;
+    public void takeDamage() {
+        hp--;
+        if (hp <= 0) {
+            lives--;
+            if(lives <=0){
+                javafx.application.Platform.exit();
+            }
+            hp = 5;
+            respawn();
+        }
     }
+
 
 
 
