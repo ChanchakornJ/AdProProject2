@@ -112,6 +112,12 @@ public class GameStage extends Pane {
         return stage;
     }
 
+    public static GameStage stage2() {
+        GameStage stage = new GameStage();
+        stage.boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss2.png");
+        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
+        return stage;
+    }
 
 
 
