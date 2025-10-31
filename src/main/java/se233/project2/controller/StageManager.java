@@ -23,12 +23,21 @@ public class StageManager {
                 break;
 
             case 1: // Game stage
-                GameStage stage = GameStage.stage1();
-                scene = new Scene(stage, GameStage.WIDTH, GameStage.HEIGHT);
-                scene.setOnKeyPressed(event -> stage.getKeys().add(event.getCode()));
-                scene.setOnKeyReleased(event -> stage.getKeys().remove(event.getCode()));
+                GameStage stage1 = GameStage.stage1();
+                scene = new Scene(stage1, GameStage.WIDTH, GameStage.HEIGHT);
+                scene.setOnKeyPressed(event -> stage1.getKeys().add(event.getCode()));
+                scene.setOnKeyReleased(event -> stage1.getKeys().remove(event.getCode()));
                 window.setScene(scene);
-                new GameLoop(stage).start();
+                new GameLoop(stage1).start();
+                break;
+
+            case 2: // Game stage
+                GameStage stage2 = GameStage.stage2();
+                scene = new Scene(stage2, GameStage.WIDTH, GameStage.HEIGHT);
+                scene.setOnKeyPressed(event -> stage2.getKeys().add(event.getCode()));
+                scene.setOnKeyReleased(event -> stage2.getKeys().remove(event.getCode()));
+                window.setScene(scene);
+                new GameLoop(stage2).start();
                 break;
 
             default:
