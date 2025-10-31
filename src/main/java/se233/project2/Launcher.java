@@ -3,7 +3,6 @@ package se233.project2;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import se233.project2.controller.DrawingLoop;
 import se233.project2.controller.GameLoop;
 import se233.project2.model.Boss;
 import se233.project2.view.GameStage;
