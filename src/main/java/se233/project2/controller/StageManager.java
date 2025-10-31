@@ -40,6 +40,15 @@ public class StageManager {
                 new GameLoop(stage2).start();
                 break;
 
+            case 3: // Game stage
+                GameStage stage3 = GameStage.stage3();
+                scene = new Scene(stage3, GameStage.WIDTH, GameStage.HEIGHT);
+                scene.setOnKeyPressed(event -> stage3.getKeys().add(event.getCode()));
+                scene.setOnKeyReleased(event -> stage3.getKeys().remove(event.getCode()));
+                window.setScene(scene);
+                new GameLoop(stage3).start();
+                break;
+
             default:
                 throw new IllegalArgumentException("Invalid stage number: " + num);
         }

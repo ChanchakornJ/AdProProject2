@@ -45,13 +45,6 @@ public class GameStage extends Pane {
     public static GameStage stage1() {
         GameStage stage = new GameStage();
 
-        // Background
-        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
-        ImageView bg = new ImageView(stage.gameStageImg);
-        bg.setFitWidth(WIDTH);
-        bg.setFitHeight(HEIGHT);
-        stage.getChildren().add(bg);
-
         // Platforms
         stage.getPlatforms().add(new Platform(0, 320, 500, 100)); // ground
         stage.getPlatforms().add(new Platform(0, 150, 150, 40));
@@ -67,8 +60,23 @@ public class GameStage extends Pane {
             stage.getChildren().add(rect);
         }
 
+        // Background
+        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
+        ImageView bg = new ImageView(stage.gameStageImg);
+        bg.setFitWidth(WIDTH);
+        bg.setFitHeight(HEIGHT);
+        stage.getChildren().add(bg);
+
         // Bullet manager
         stage.bulletManager = new BulletManager(stage);
+
+        // Boss
+        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager);
+        stage.getChildren().add(stage.boss);
+
+        // Minions
+        stage.getMinions().add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", stage.bulletManager));
+        stage.getChildren().addAll(stage.getMinions());
 
         // Player
         GameCharacter player = new GameCharacter(
@@ -82,13 +90,6 @@ public class GameStage extends Pane {
         stage.getGameCharacterList().add(player);
         stage.getChildren().add(player);
 
-        // Minions
-        stage.getMinions().add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", stage.bulletManager));
-        stage.getChildren().addAll(stage.getMinions());
-
-        // Boss
-        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager);
-        stage.getChildren().add(stage.boss);
 
         // Score positions
         stage.getScoreList().add(new Score(30, GROUND + 30));
@@ -99,14 +100,6 @@ public class GameStage extends Pane {
 
     public static GameStage stage2() {
         GameStage stage = new GameStage();
-
-        // Background
-        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
-        ImageView bg = new ImageView(stage.gameStageImg);
-        bg.setFitWidth(WIDTH);
-        bg.setFitHeight(HEIGHT);
-        stage.getChildren().add(bg);
-
         // Platforms for stage2 (can be different)
         stage.getPlatforms().add(new Platform(0, 320, 500, 100)); // ground
         // add more if needed
@@ -119,8 +112,21 @@ public class GameStage extends Pane {
             stage.getChildren().add(rect);
         }
 
+
+        // Background
+        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
+        ImageView bg = new ImageView(stage.gameStageImg);
+        bg.setFitWidth(WIDTH);
+        bg.setFitHeight(HEIGHT);
+        stage.getChildren().add(bg);
+
+
         // Bullet manager
         stage.bulletManager = new BulletManager(stage);
+
+        // Boss
+        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager);
+        stage.getChildren().add(stage.boss);
 
         // Player
         GameCharacter player = new GameCharacter(
@@ -134,9 +140,50 @@ public class GameStage extends Pane {
         stage.getGameCharacterList().add(player);
         stage.getChildren().add(player);
 
+        return stage;
+    }
+
+    public static GameStage stage3() {
+        GameStage stage = new GameStage();
+        // Platforms for stage2 (can be different)
+        stage.getPlatforms().add(new Platform(0, 320, 500, 100)); // ground
+        // add more if needed
+
+        // Draw platforms
+        for (Platform p : stage.getPlatforms()) {
+            javafx.scene.shape.Rectangle rect =
+                    new javafx.scene.shape.Rectangle(p.getX(), p.getY(), p.getWidth(), p.getHeight());
+            rect.setFill(javafx.scene.paint.Color.BROWN);
+            stage.getChildren().add(rect);
+        }
+
+
+        // Background
+        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
+        ImageView bg = new ImageView(stage.gameStageImg);
+        bg.setFitWidth(WIDTH);
+        bg.setFitHeight(HEIGHT);
+        stage.getChildren().add(bg);
+
+
+        // Bullet manager
+        stage.bulletManager = new BulletManager(stage);
+
         // Boss
         stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager);
         stage.getChildren().add(stage.boss);
+
+        // Player
+        GameCharacter player = new GameCharacter(
+                0, 30, 30,
+                "assets/Character.png",
+                6, 6, 1, 65, 64,
+                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
+        );
+        player.setPlatforms(stage.getPlatforms());
+        player.setBulletManager(stage.bulletManager);
+        stage.getGameCharacterList().add(player);
+        stage.getChildren().add(player);
 
         return stage;
     }
