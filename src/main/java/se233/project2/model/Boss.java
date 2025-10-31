@@ -20,11 +20,18 @@ public class Boss extends Pane {
     int hp = 20;
     boolean alive = true;
     private Image bossImage;
+    private ImageView sprite;
     private long lastShotTime = 0;
     private BulletManager bulletManager;
     private List<double[]> cannons = new ArrayList<>();
-    private final List<Rectangle2D> hitBoxes = new ArrayList<>();
 
+    private int totalCols = 4;
+    private int totalRows = 1;
+    private double frameWidth;
+    private double frameHeight;
+    private int frame = 0;
+    private long lastFrameTime = 0;
+    private long frameDelay = 120;
 
     public Boss(double x, double y, double w, double h, double speed, int hp, String imgName, BulletManager bulletManager){
         this.x = x;
@@ -37,7 +44,7 @@ public class Boss extends Pane {
 
 
         this.bossImage = new Image(Launcher.class.getResourceAsStream(imgName));
-        ImageView sprite = new ImageView(bossImage);
+        this.sprite = new ImageView(bossImage);
         sprite.setFitWidth(w);
         sprite.setFitHeight(h);
         getChildren().add(sprite);
@@ -46,7 +53,10 @@ public class Boss extends Pane {
     }
 
     public void update() {
+        animate();
         x += speed;
+        if (x < 400 || x > 700) speed *= -1;
+        setTranslateX(x);
         long now = System.currentTimeMillis();
         if (now - lastShotTime > 1500) {
             for (double[] c : cannons) {
@@ -59,6 +69,17 @@ public class Boss extends Pane {
 
         if (x < 400 || x > 700) speed *= -1; // patrol
     }
+    private void animate() {
+        long now = System.currentTimeMillis();
+        if (bossImage == null || sprite == null) return;
+
+        if (now - lastFrameTime > frameDelay) {
+            frame = (frame + 1) % totalCols;
+            sprite.setViewport(new Rectangle2D(frame * frameWidth, 0, frameWidth, frameHeight));
+            lastFrameTime = now;
+        }
+    }
+
     public void addCannon(double offsetX, double offsetY) {
         cannons.add(new double[]{offsetX, offsetY});
     }
@@ -105,6 +126,14 @@ public class Boss extends Pane {
     }
 
 
+    public void setAnimationConfig(int cols, int rows, long delay) {
+        this.totalCols = cols;
+        this.totalRows = rows;
+        this.frameDelay = delay;
+        frameWidth = bossImage.getWidth() / totalCols;
+        frameHeight = bossImage.getHeight() / totalRows;
+        sprite.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
+    }
 
 
 }

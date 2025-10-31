@@ -57,9 +57,10 @@ public class MenuPage extends StackPane {
         Button helpBtn = new Button("How to Play");
         Button exitBtn = new Button("Exit");
         Button stage2Btn = new Button("Stage 2");
+        Button stage3Btn = new Button("Stage 3");
 
         // Style
-        for (Button btn : new Button[]{startBtn, helpBtn, exitBtn, stage2Btn}) {
+        for (Button btn : new Button[]{startBtn, helpBtn, exitBtn, stage2Btn, stage3Btn}) {
             btn.setFont(Font.font(arcadeFont.getFamily(), 18));
             btn.setStyle(
                             "-fx-background-color: #031cc1;" +
@@ -84,9 +85,10 @@ public class MenuPage extends StackPane {
         helpBtn.setOnAction(e -> showHelpPopup());
         exitBtn.setOnAction(e -> System.exit(0));
         stage2Btn.setOnAction(e -> stageManager.loadStage(2));
+        stage3Btn.setOnAction(e -> stageManager.loadStage(3));
 
         // Layout
-        VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, stage2Btn);
+        VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, stage2Btn, stage3Btn);
         vbox.setAlignment(Pos.CENTER);
 
         getChildren().add(vbox);
