@@ -32,6 +32,13 @@ public class GameStage extends Pane {
         platforms = new ArrayList<>();
         minions = new ArrayList<>();
         keys = new Keys();
+
+        setPrefSize(WIDTH, HEIGHT);
+        setMinSize(WIDTH, HEIGHT);
+        setMaxSize(WIDTH, HEIGHT);
+        setClip(new javafx.scene.shape.Rectangle(WIDTH, HEIGHT));
+
+
     }
 
     public Boss getBoss() { return boss; }
@@ -44,6 +51,7 @@ public class GameStage extends Pane {
 
     public static GameStage stage1() {
         GameStage stage = new GameStage();
+
 
         // Platforms
         stage.getPlatforms().add(new Platform(0, 320, 500, 100)); // ground
@@ -74,8 +82,13 @@ public class GameStage extends Pane {
         stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager);
         stage.boss.setAnimationConfig(1, 1, 120);
         stage.getChildren().add(stage.boss);
-        boss.addCannonPercent(0.2, 0.3);
-        boss.addCannonPercent(0.6, 0.3);
+        boss.addCannonPercent(0.05, 0.4);
+        boss.addCannonPercent(0.28, 0.4);
+        boss.addHitPart(0.05, 0.4, 0.05, 0.05);
+        boss.addHitPart(0.28, 0.4, 0.05, 0.05);
+        boss.addHitPart(0.1, 0.65, 0.2, 0.2);
+
+
 
         // Minions
         stage.getMinions().add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", stage.bulletManager));

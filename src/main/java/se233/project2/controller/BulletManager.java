@@ -13,6 +13,7 @@ public class BulletManager {
     private final Pane root;
     private final List<ImageView> bullets = new ArrayList<>();
     private final Image bulletImg = new Image(Launcher.class.getResourceAsStream("assets/Bullet.png"));
+    private final Image bossBullet = new Image(Launcher.class.getResourceAsStream("assets/BossBullet.png"));
     private final double bulletSpeed = 6;
 
     public class BulletMeta {
@@ -29,7 +30,12 @@ public class BulletManager {
     }
 
     public void shoot(double startX, double startY, boolean facingRight, boolean fromPlayer) {
-        ImageView bullet = new ImageView(bulletImg);
+        ImageView bullet;
+        if(fromPlayer){
+            bullet = new ImageView(bulletImg);
+        }else{
+            bullet = new ImageView(bossBullet);
+        }
         bullet.setFitWidth(10);
         bullet.setFitHeight(5);
         bullet.setX(startX);

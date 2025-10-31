@@ -105,9 +105,11 @@ public class GameLoop {
 
     private void checkBulletBossCollision(GameStage gameStage) {
         Boss boss = gameStage.getBoss();
-        Rectangle2D hitBox = boss.getHitBox();
+        if (boss == null || !boss.isAlive()) return;
 
-        for (ImageView bullet : gameStage.getBulletManager().getBullets()) {
+        var bullets = gameStage.getBulletManager().getBullets();
+
+        for (ImageView bullet : bullets) {
             BulletManager.BulletMeta meta = (BulletManager.BulletMeta) bullet.getUserData();
             if (!meta.fromPlayer) continue;
 
@@ -116,13 +118,23 @@ public class GameLoop {
                     bullet.getFitWidth(), bullet.getFitHeight()
             );
 
-            if (bulletBox.intersects(hitBox)) {
-                boss.takeDamage();
-                gameStage.getBulletManager().removeBullet(bullet);
-                break;
+            for (Boss.HitPart part : boss.getHitParts()) {
+                if (part.isDestroyed()) continue;
+
+                if (bulletBox.intersects(part.getBox())) {
+                    part.takeHit();
+                    gameStage.getBulletManager().removeBullet(bullet);
+
+                    if (part.isDestroyed()) {
+                        boss.explodeAt(part.getBox());
+                    }
+                    boss.takeDamage();
+                    return;
+                }
             }
         }
     }
+
 
     private void checkBulletMinionCollision(GameStage gameStage) {
         var bullets = gameStage.getBulletManager().getBullets();

@@ -1,12 +1,16 @@
 package se233.project2.model;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
 
@@ -32,6 +36,10 @@ public class Boss extends Pane {
     private int frame = 0;
     private long lastFrameTime = 0;
     private long frameDelay = 120;
+    private Rectangle2D hitBox;
+    private List<HitPart> hitParts = new ArrayList<>();
+
+
 
     public Boss(double x, double y, double w, double h, double speed, int hp, String imgName, BulletManager bulletManager){
         this.x = x;
@@ -57,6 +65,9 @@ public class Boss extends Pane {
         x += speed;
         if (x < 400 || x > 700) speed *= -1;
         setTranslateX(x);
+        updateHitBox();
+        updateHitParts();
+
         long now = System.currentTimeMillis();
         if (now - lastShotTime > 1500) {
             for (double[] c : cannons) {
@@ -66,6 +77,20 @@ public class Boss extends Pane {
             }
             lastShotTime = now;
         }
+        for (HitPart p : hitParts) {
+            if (p.isDestroyed()) continue;
+            Rectangle r = new Rectangle(
+                    p.getBox().getMinX() - getTranslateX(),
+                    p.getBox().getMinY() - getTranslateY(),
+                    p.getBox().getWidth(),
+                    p.getBox().getHeight()
+            );
+
+            r.setStroke(Color.RED);
+            r.setFill(Color.TRANSPARENT);
+            if (!getChildren().contains(r)) getChildren().add(r);
+        }
+
 
     }
     private void animate() {
@@ -83,11 +108,88 @@ public class Boss extends Pane {
 
 
     public Rectangle2D getHitBox() {
-        double hitX = getTranslateX() + w * 0.25;
-        double hitY = getTranslateY() + h * 0.3;
-        double hitW = w * 0.5;
-        double hitH = h * 0.4;
-        return new Rectangle2D(hitX, hitY, hitW, hitH);    }
+        return hitBox;
+    }
+    private void updateHitBox() {
+        if (hitBox != null) {
+            hitBox = new Rectangle2D(
+                    getTranslateX() + w * 0.25,
+                    getTranslateY() + h * 0.3,
+                    w * 0.5,
+                    h * 0.4
+            );
+        }
+    }
+    public static class HitPart {
+        private Rectangle2D box;
+        private int hp = 3;
+        private boolean destroyed = false;
+        double offsetX, offsetY, widthPercent, heightPercent;
+
+        public Rectangle2D getBox() { return box; }
+        public boolean isDestroyed() { return destroyed; }
+        public int getHp() { return hp; }
+
+        public void takeHit() {
+            if (destroyed) return;
+            hp--;
+            if (hp <= 0) destroyed = true;
+        }
+    }
+
+    public void addHitPart(double offsetX, double offsetY, double widthPercent, double heightPercent) {
+        HitPart part = new HitPart();
+        part.offsetX = offsetX;
+        part.offsetY = offsetY;
+        part.widthPercent = widthPercent;
+        part.heightPercent = heightPercent;
+        part.hp = 3;
+        updateHitPart(part);
+        hitParts.add(part);
+    }
+    private void updateHitParts() {
+        for (HitPart part : hitParts) {
+            if (part.destroyed) continue;
+            updateHitPart(part);
+        }
+    }
+
+    private void updateHitPart(HitPart part) {
+        part.box = new Rectangle2D(
+                getTranslateX() + w * part.offsetX,
+                getTranslateY() + h * part.offsetY,
+                w * part.widthPercent,
+                h * part.heightPercent
+        );
+    }
+    public void explodeAt(Rectangle2D box) {
+        ImageView explosion = new ImageView(
+                new Image(Launcher.class.getResourceAsStream("assets/BossBullet.png"))
+        );
+
+        explosion.setX(box.getMinX());
+        explosion.setY(box.getMinY());
+        explosion.setFitWidth(box.getWidth());
+        explosion.setFitHeight(box.getHeight());
+
+        Pane root = (Pane) getParent(); // GameStage
+        root.getChildren().add(explosion);
+
+        new Timeline(
+                new KeyFrame(Duration.millis(400),
+                        e -> root.getChildren().remove(explosion))
+        ).play();
+    }
+
+    public boolean allHitPartsDestroyed() {
+        return hitParts.stream().allMatch(p -> p.destroyed);
+    }
+
+
+
+
+
+
 
 
     void draw(GraphicsContext gc) {
@@ -96,12 +198,11 @@ public class Boss extends Pane {
         gc.setFill(Color.WHITE);
         gc.fillText("Boss HP: " + hp, x, y - h - 10);
     }
-    public void takeDamage(){
+    public void takeDamage() {
         hp--;
-        if (hp <=0){
-            die();
-        }
+        if (hp <= 0) die();
     }
+
     public void die() {
         alive = false;
 
@@ -136,4 +237,15 @@ public class Boss extends Pane {
     public boolean isAlive() {
         return alive;
     }
+
+    public double getW() {
+        return w;
+    }
+    public List<HitPart> getHitParts() {
+        return hitParts;
+    }
+
+
+
+
 }

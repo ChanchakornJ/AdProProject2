@@ -20,6 +20,9 @@ public class StageManager {
                 MenuPage menuPage = new MenuPage(this);
                 scene = new Scene(menuPage, GameStage.WIDTH, GameStage.HEIGHT);
                 window.setScene(scene);
+                window.setResizable(false);
+                window.sizeToScene();
+
                 break;
 
             case 1: // Game stage
@@ -29,6 +32,9 @@ public class StageManager {
                 scene.setOnKeyPressed(event -> stage1.getKeys().add(event.getCode()));
                 scene.setOnKeyReleased(event -> stage1.getKeys().remove(event.getCode()));
                 window.setScene(scene);
+                window.setResizable(false);
+                window.sizeToScene();
+
                 new GameLoop(stage1).start();
                 break;
 
@@ -39,6 +45,9 @@ public class StageManager {
                 scene.setOnKeyPressed(event -> stage2.getKeys().add(event.getCode()));
                 scene.setOnKeyReleased(event -> stage2.getKeys().remove(event.getCode()));
                 window.setScene(scene);
+                window.setResizable(false);
+                window.sizeToScene();
+
                 new GameLoop(stage2).start();
                 break;
 
@@ -49,6 +58,9 @@ public class StageManager {
                 scene.setOnKeyPressed(event -> stage3.getKeys().add(event.getCode()));
                 scene.setOnKeyReleased(event -> stage3.getKeys().remove(event.getCode()));
                 window.setScene(scene);
+                window.setResizable(false);
+                window.sizeToScene();
+
                 new GameLoop(stage3).start();
                 break;
 
