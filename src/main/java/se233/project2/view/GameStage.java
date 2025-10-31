@@ -197,6 +197,7 @@ public class GameStage extends Pane {
                     60, 60,
                     "assets/FlyingMinion.png"
             );
+            fm.setAnimationConfig(4, 1, 100); // 4 frames, 1 row, 100ms/frame
             stage.getChildren().add(fm);
             stage.getMinions().add(fm); // ถ้าอยากให้ใช้ร่วมกับระบบ collision เดิม
         }
