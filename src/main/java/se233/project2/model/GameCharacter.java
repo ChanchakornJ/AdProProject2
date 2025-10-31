@@ -352,11 +352,6 @@ public class GameCharacter extends Pane {
     }
 
 
-
-
-
-
-
 }
 
 

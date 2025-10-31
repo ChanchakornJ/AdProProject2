@@ -50,6 +50,15 @@ public class Minion extends Pane {
         setTranslateY(y);
     }
 
+    public Minion() {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.speed = speed;
+        this.hp = hp;
+    }
+
     public void update() {
         if (!active) return;
 

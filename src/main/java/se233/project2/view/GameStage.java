@@ -203,6 +203,18 @@ public class GameStage extends Pane {
         stage.getGameCharacterList().add(player);
         stage.getChildren().add(player);
 
+        for (int i = 0; i < 5; i++) {
+            FlyingMinion fm = new FlyingMinion(
+                    800 + i * 150,
+                    100 + i * 40,
+                    60, 60,
+                    "assets/FlyingMinion.png"
+            );
+            fm.setAnimationConfig(4, 1, 100); // 4 frames, 1 row, 100ms/frame
+            stage.getChildren().add(fm);
+            stage.getMinions().add(fm); // ถ้าอยากให้ใช้ร่วมกับระบบ collision เดิม
+        }
+
         return stage;
     }
 }

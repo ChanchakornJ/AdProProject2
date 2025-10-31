@@ -5,6 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import se233.project2.model.Boss;
+import se233.project2.model.FlyingMinion;
 import se233.project2.model.GameCharacter;
 import se233.project2.model.Minion;
 import se233.project2.view.GameStage;
@@ -78,6 +79,15 @@ public class GameLoop {
             }
             minionSpawned = true;
         }
+
+        for (Minion m : gameStage.getMinions()) {
+            if (m instanceof FlyingMinion fm && fm.isAlive()) {
+                fm.update();
+            } else if (m.isAlive()) {
+                m.update();
+            }
+        }
+
 
         checkBulletBossCollision(gameStage);
         checkBulletMinionCollision(gameStage);
@@ -213,7 +223,31 @@ public class GameLoop {
                 }
             }
         }
+
     }
+    private void checkMinionPlayerCollision(GameStage gameStage) {
+        var gameCharacters = gameStage.getGameCharacterList();
+        var minions = gameStage.getMinions();
+
+        for (var minion : minions) {
+            if (minion instanceof FlyingMinion fm && fm.isAlive()) {
+                Rectangle2D minionBox = fm.getHitBox();
+                for (GameCharacter gameCharacter : gameCharacters) {
+                    Rectangle2D playerBox = new Rectangle2D(
+                            gameCharacter.getTranslateX(),
+                            gameCharacter.getTranslateY(),
+                            gameCharacter.getCharacterWidth(),
+                            gameCharacter.getCharacterHeight()
+                    );
+                    if (minionBox.intersects(playerBox)) {
+                        gameCharacter.respawn(); // หรือ player.takeDamage();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     private void checkStageTransition(GameStage stage) {
         if (stageSwitched) return;
 
