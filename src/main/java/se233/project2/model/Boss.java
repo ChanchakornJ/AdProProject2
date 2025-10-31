@@ -67,7 +67,6 @@ public class Boss extends Pane {
             lastShotTime = now;
         }
 
-        if (x < 400 || x > 700) speed *= -1; // patrol
     }
     private void animate() {
         long now = System.currentTimeMillis();
@@ -80,15 +79,9 @@ public class Boss extends Pane {
         }
     }
 
-    public void addCannon(double offsetX, double offsetY) {
-        cannons.add(new double[]{offsetX, offsetY});
-    }
 
-    public Rectangle2D setHitBox(double hitX, double hitY){
-        double hitW = w * 0.5;
-        double hitH = h * 0.4;
-        return new Rectangle2D(hitX, hitY, hitW, hitH);
-    }
+
+
     public Rectangle2D getHitBox() {
         double hitX = getTranslateX() + w * 0.25;
         double hitY = getTranslateY() + h * 0.3;
@@ -115,15 +108,16 @@ public class Boss extends Pane {
         if (getParent() instanceof Pane parent) {
             parent.getChildren().remove(this);
 
-            ImageView explosion = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Stage1Pathway.png"))
-            );
-            explosion.setX(getTranslateX());
-            explosion.setY(getTranslateY());
-            parent.getChildren().add(explosion);
-        } else {
-            System.err.println("Boss has no parent when dying!");
+            ImageView pathway = new ImageView(new Image(
+                    Launcher.class.getResourceAsStream("assets/Stage1Pathway.png")
+            ));
+            pathway.setX(350);
+            pathway.setY(250);
+            this.setVisible(false);
+            parent.getChildren().add(pathway);
         }
     }
+
 
 
     public void setAnimationConfig(int cols, int rows, long delay) {
@@ -134,6 +128,12 @@ public class Boss extends Pane {
         frameHeight = bossImage.getHeight() / totalRows;
         sprite.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
+    public void addCannonPercent(double percentX, double percentY) {
+        cannons.add(new double[]{percentX * w, percentY * h});
+    }
 
 
+    public boolean isAlive() {
+        return alive;
+    }
 }

@@ -22,7 +22,7 @@ public class GameStage extends Pane {
     private Keys keys;
     private List<Platform> platforms;
     private BulletManager bulletManager;
-    private Boss boss;
+    private static Boss boss;
     private List<Minion> minions;
 
     public GameStage() {
@@ -72,7 +72,10 @@ public class GameStage extends Pane {
 
         // Boss
         stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager);
+        stage.boss.setAnimationConfig(1, 1, 120);
         stage.getChildren().add(stage.boss);
+        boss.addCannonPercent(0.2, 0.3);
+        boss.addCannonPercent(0.6, 0.3);
 
         // Minions
         stage.getMinions().add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", stage.bulletManager));
