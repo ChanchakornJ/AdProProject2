@@ -1,6 +1,7 @@
 package se233.project2.model;
 
 
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -8,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
+import se233.project2.controller.StageManager;
 import se233.project2.view.GameStage;
+import se233.project2.view.MenuPage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -332,12 +335,19 @@ public class GameCharacter extends Pane {
         if (hp <= 0) {
             lives--;
             if(lives <=0){
-                javafx.application.Platform.exit();
+                stageManager.loadStage(0);
+                return;
             }
             hp = 5;
             respawn();
         }
     }
+    private StageManager stageManager;
+
+    public void setStageManager(StageManager stageManager) {
+        this.stageManager = stageManager;
+    }
+
 
 
 

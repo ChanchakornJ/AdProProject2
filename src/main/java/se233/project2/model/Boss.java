@@ -59,11 +59,14 @@ public class Boss extends Pane {
         setTranslateX(x);
         long now = System.currentTimeMillis();
         if (now - lastShotTime > 1500) {
-            double bulletX = getTranslateX();
-            double bulletY = getTranslateY() + getHeight() / 2;
-            bulletManager.shoot(bulletX, bulletY, false, false);
+            for (double[] c : cannons) {
+                double bulletX = getTranslateX() + c[0];
+                double bulletY = getTranslateY() + c[1];
+                bulletManager.shoot(bulletX, bulletY, false, false);
+            }
             lastShotTime = now;
         }
+
     }
     private void animate() {
         long now = System.currentTimeMillis();
@@ -76,9 +79,8 @@ public class Boss extends Pane {
         }
     }
 
-    public void addCannon(double offsetX, double offsetY) {
-        cannons.add(new double[]{offsetX, offsetY});
-    }
+
+
 
     public Rectangle2D getHitBox() {
         double hitX = getTranslateX() + w * 0.25;
@@ -106,15 +108,16 @@ public class Boss extends Pane {
         if (getParent() instanceof Pane parent) {
             parent.getChildren().remove(this);
 
-            ImageView explosion = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Stage1Pathway.png"))
-            );
-            explosion.setX(getTranslateX());
-            explosion.setY(getTranslateY());
-            parent.getChildren().add(explosion);
-        } else {
-            System.err.println("Boss has no parent when dying!");
+            ImageView pathway = new ImageView(new Image(
+                    Launcher.class.getResourceAsStream("assets/Stage1Pathway.png")
+            ));
+            pathway.setX(350);
+            pathway.setY(250);
+            this.setVisible(false);
+            parent.getChildren().add(pathway);
         }
     }
+
 
 
     public void setAnimationConfig(int cols, int rows, long delay) {
@@ -125,6 +128,10 @@ public class Boss extends Pane {
         frameHeight = bossImage.getHeight() / totalRows;
         sprite.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
+    public void addCannonPercent(double percentX, double percentY) {
+        cannons.add(new double[]{percentX * w, percentY * h});
+    }
+
 
     public boolean isAlive() {
         return alive;

@@ -66,6 +66,9 @@ public class GameLoop {
         for (Minion m : gameStage.getMinions()) {
             if (m.isAlive()) m.update();
         }
+        if (gameStage.getBoss() != null) {
+            gameStage.getBoss().update();
+        }
 
         if (!minionSpawned && !gameStage.getBulletManager().getBullets().isEmpty()) {
             for (Minion m : gameStage.getMinions()) {
@@ -77,6 +80,8 @@ public class GameLoop {
         checkBulletBossCollision(gameStage);
         checkBulletMinionCollision(gameStage);
         checkBulletPlayerCollision(gameStage);
+        checkPlayerBossCollision(gameStage);
+
     }
 
     private void checkCollisions(List<GameCharacter> list) {
@@ -139,6 +144,29 @@ public class GameLoop {
             }
         }
     }
+    private void checkPlayerBossCollision(GameStage gameStage) {
+        Boss boss = gameStage.getBoss();
+        if (boss == null || !boss.isAlive()) return;
+
+        for (GameCharacter player : gameStage.getGameCharacterList()) {
+            Rectangle2D bossBox = boss.getHitBox();
+            Rectangle2D playerBox = new Rectangle2D(
+                    player.getTranslateX(),
+                    player.getTranslateY(),
+                    player.getCharacterWidth(),
+                    player.getCharacterHeight()
+            );
+
+            if (playerBox.intersects(bossBox)) {
+                if (player.getTranslateX() < boss.getTranslateX()) {
+                    player.setTranslateX(boss.getTranslateX() - player.getCharacterWidth());
+                } else {
+                    player.setTranslateX(boss.getTranslateX() + boss.getWidth());
+                }
+            }
+        }
+    }
+
 
     private void checkBulletPlayerCollision(GameStage gameStage) {
         var bullets = gameStage.getBulletManager().getBullets();
