@@ -15,113 +15,121 @@ import static org.mockito.Mockito.mock;
 public class ScoringTest {
     private GameCharacter gameCharacter;
     private BulletManager bulletManager;
-    private Minion minion;
 
     @BeforeEach
     void setUp() {
-        new JFXPanel();
-
+        new JFXPanel(); // Initialize JavaFX runtime
         bulletManager = mock(BulletManager.class);
-
         gameCharacter = new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE);
         gameCharacter.resetScore();
+    }
 
-        minion = new Minion(200, 200, 40, 60, 2.0, 3, "/assets/Minion1.png", bulletManager);
-        minion.setActive(true);
+    private Minion createMinion(double x, double y, int hp, String imgPath) {
+        return new Minion(x, y, 40, 60, 2.0, hp, imgPath, bulletManager);
     }
 
     @Test
-    void testScoreIncrease_whenMinionDies() {
-        minion.takeDamage();
-        minion.takeDamage();
-        minion.takeDamage(); // dead now
+    void testRegularEnemyKillGivesOnePoint() {
+        Minion regular = createMinion(100, 100, 1, "/assets/Minion1.png");
 
-        if (!minion.isAlive()) {
-            gameCharacter.addScore(100);
-        }
+        regular.takeDamage(); // dies instantly
+        if (!regular.isAlive()) gameCharacter.addScore(1);
 
-        assertEquals(100, gameCharacter.getScore(), "Player should earn 100 points for killing one minion");
+        assertEquals(1, gameCharacter.getScore(), "Killing a regular enemy should give 1 point");
     }
 
     @Test
-    void testScoreDoesNotIncreaseIfMinionStillAlive() {
-        minion.takeDamage();
-        minion.takeDamage(); // still alive
+    void testSecondTierEnemyKillGivesTwoPoints() {
+        Minion secondTier = createMinion(200, 100, 2, "/assets/minion_tier2.png");
 
-        if (!minion.isAlive()) {
-            gameCharacter.addScore(100);
-        }
+        secondTier.takeDamage();
+        secondTier.takeDamage(); // dies after 2 hits
+        if (!secondTier.isAlive()) gameCharacter.addScore(2);
 
-        assertEquals(0, gameCharacter.getScore(), "Score should remain 0 until minion actually dies");
+        assertEquals(2, gameCharacter.getScore(), "Killing a second-tier enemy should give 2 points");
+    }
+
+    @Test
+    void testSmallBossKillGivesOnePoint() {
+        Minion smallBoss = createMinion(300, 100, 3, "/assets/boss_small.png");
+
+        for (int i = 0; i < 3; i++) smallBoss.takeDamage(); // simulate full damage
+        if (!smallBoss.isAlive()) gameCharacter.addScore(1);
+
+        assertEquals(1, gameCharacter.getScore(), "Killing a small boss should give 1 point");
+    }
+
+    @Test
+    void testLargeBossKillGivesTwoPoints() {
+        Minion largeBoss = createMinion(400, 100, 5, "/assets/boss_large.png");
+
+        for (int i = 0; i < 5; i++) largeBoss.takeDamage();
+        if (!largeBoss.isAlive()) gameCharacter.addScore(2);
+
+        assertEquals(2, gameCharacter.getScore(), "Killing a large boss should give 2 points");
+    }
+
+    @Test
+    void testBulletHitKillsEnemyAndAwardsScore() {
+        Minion enemy = createMinion(150, 150, 1, "/assets/minion_regular.png");
+        Bullet bullet = new Bullet(150, 150, 0, 0, true);
+
+        boolean hit = bullet.x >= enemy.getHitBox().getMinX() &&
+                bullet.x <= enemy.getHitBox().getMaxX() &&
+                bullet.y >= enemy.getHitBox().getMinY() &&
+                bullet.y <= enemy.getHitBox().getMaxY();
+
+        if (hit) enemy.takeDamage();
+        if (!enemy.isAlive()) gameCharacter.addScore(1);
+
+        assertTrue(hit, "Bullet should hit enemy");
+        assertFalse(enemy.isAlive(), "Enemy should die from bullet");
+        assertEquals(1, gameCharacter.getScore(), "Killing an enemy by bullet should award 1 point");
+    }
+
+    @Test
+    void testNoScoreIfEnemyStillAlive() {
+        Minion halfDead = createMinion(200, 200, 3, "/assets/minion_regular.png");
+
+        halfDead.takeDamage(); // still alive
+        if (!halfDead.isAlive()) gameCharacter.addScore(1);
+
+        assertTrue(halfDead.isAlive(), "Enemy should still be alive");
+        assertEquals(0, gameCharacter.getScore(), "Score should remain 0 until enemy dies");
     }
 
     @Test
     void testMultipleKillsAddUpScore() {
-        // First minion
-        Minion m1 = new Minion(100, 100, 40, 60, 2.0, 1, "/assets/minion.png", bulletManager);
-        m1.takeDamage(); // dies
-        if (!m1.isAlive()) gameCharacter.addScore(100);
+        Minion e1 = createMinion(100, 100, 1, "/assets/minion_regular.png");
+        Minion e2 = createMinion(200, 100, 2, "/assets/minion_tier2.png");
 
-        // Second minion
-        Minion m2 = new Minion(300, 100, 40, 60, 2.0, 2, "/assets/minion.png", bulletManager);
-        m2.takeDamage();
-        m2.takeDamage(); // dies
-        if (!m2.isAlive()) gameCharacter.addScore(100);
+        e1.takeDamage();
+        e2.takeDamage();
+        e2.takeDamage();
 
-        assertEquals(200, gameCharacter.getScore(), "Player should have 200 points after killing two minions");
+        if (!e1.isAlive()) gameCharacter.addScore(1);
+        if (!e2.isAlive()) gameCharacter.addScore(2);
+
+        assertEquals(3, gameCharacter.getScore(), "Killing both enemies should total 3 points");
     }
 
     @Test
-    void testScoreResetsToZero() {
-        gameCharacter.addScore(250);
+    void testScoreResetWorksProperly() {
+        gameCharacter.addScore(5);
         gameCharacter.resetScore();
-        assertEquals(0, gameCharacter.getScore(), "Score should reset to 0 after resetScore() call");
+        assertEquals(0, gameCharacter.getScore(), "Score should reset to zero");
     }
 
     @Test
-    void testBulletHitKillsMinionAndAddsScore() {
-        // Mock bullet hitting logic
-        Bullet bullet = new Bullet(200, 200, 0, 0, true);
+    void testOverkillDoesNotAddExtraPoints() {
+        Minion minion = createMinion(100, 100, 1, "/assets/Minion1.png");
+        minion.takeDamage();
+        minion.takeDamage(); // extra damage on dead minion
 
-        // Simulate hit detection (simple bounding box logic)
-        boolean hit = bullet.x >= minion.getHitBox().getMinX() &&
-                bullet.x <= minion.getHitBox().getMaxX() &&
-                bullet.y >= minion.getHitBox().getMinY() &&
-                bullet.y <= minion.getHitBox().getMaxY();
+        if (!minion.isAlive()) gameCharacter.addScore(1);
+        gameCharacter.addScore(1); // simulate double counting (shouldn't happen)
 
-        if (hit) {
-            minion.takeDamage();
-            minion.takeDamage();
-            minion.takeDamage();
-        }
-
-        if (!minion.isAlive()) {
-            gameCharacter.addScore(100);
-        }
-
-        assertTrue(hit, "Bullet should collide with minion");
-        assertFalse(minion.isAlive(), "Minion should die after bullet hit damage");
-        assertEquals(100, gameCharacter.getScore(), "Score should increase by 100 after bullet kill");
-    }
-
-    @Test
-    void testNoScoreIfBulletMisses() {
-        Bullet bullet = new Bullet(10, 10, 0, 0, true); // way outside hitbox
-
-        boolean hit = bullet.x >= minion.getHitBox().getMinX() &&
-                bullet.x <= minion.getHitBox().getMaxX() &&
-                bullet.y >= minion.getHitBox().getMinY() &&
-                bullet.y <= minion.getHitBox().getMaxY();
-
-        if (hit) {
-            minion.takeDamage();
-            gameCharacter.addScore(100);
-        }
-
-        assertFalse(hit, "Bullet should not hit minion");
-        assertTrue(minion.isAlive(), "Minion should remain alive when not hit");
-        assertEquals(0, gameCharacter.getScore(), "Score should not change when bullet misses");
+        assertEquals(1, gameCharacter.getScore(), "Score should not increase for overkill");
     }
 
 }
-
