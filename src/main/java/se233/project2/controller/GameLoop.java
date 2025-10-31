@@ -15,6 +15,8 @@ public class GameLoop {
     private final GameStage gameStage;
     private final AnimationTimer timer;
     private boolean minionSpawned = false;
+    private boolean stageSwitched = false;
+
 
     public GameLoop(GameStage gameStage) {
         this.gameStage = gameStage;
@@ -81,6 +83,8 @@ public class GameLoop {
         checkBulletMinionCollision(gameStage);
         checkBulletPlayerCollision(gameStage);
         checkPlayerBossCollision(gameStage);
+        checkStageTransition(gameStage);
+
 
     }
 
@@ -89,6 +93,7 @@ public class GameLoop {
             g.checkReachGameWall();
             g.checkReachHighest();
             g.checkReachFloor();
+
         }
     }
 
@@ -197,4 +202,16 @@ public class GameLoop {
             }
         }
     }
+    private void checkStageTransition(GameStage stage) {
+        if (stageSwitched) return;
+
+        GameCharacter player = stage.getGameCharacterList().get(0);
+
+        if (player.getTranslateX() + player.getCharacterWidth() >= GameStage.WIDTH + 20) {
+            stageSwitched = true;
+            StageManager sm = player.getStageManager();
+            sm.loadStage(sm.getCurrentStage() + 1);
+        }
+    }
+
 }

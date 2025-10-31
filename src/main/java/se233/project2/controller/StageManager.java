@@ -56,4 +56,10 @@ public class StageManager {
                 throw new IllegalArgumentException("Invalid stage number: " + num);
         }
     }
+    public int getCurrentStage() {
+        return currentStage;
+    }
+
+
+
 }
