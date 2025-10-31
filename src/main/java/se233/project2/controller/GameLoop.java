@@ -60,6 +60,9 @@ public class GameLoop {
         for (Minion m : gameStage.getMinions()) {
             if (m.isAlive()) m.update();
         }
+        if (gameStage.getBoss() != null) {
+            gameStage.getBoss().update();
+        }
 
         if (!minionSpawned && !gameStage.getBulletManager().getBullets().isEmpty()) {
             for (Minion m : gameStage.getMinions()) {
