@@ -119,12 +119,11 @@ public class GameCharacter extends Pane {
         }
     }
     public void checkReachGameWall() {
-        if(x <= 0) {
+        if (x <= 0) {
             x = 0;
-        } else if( x+getWidth() >= GameStage.WIDTH) {
-            x = GameStage.WIDTH-(int)getWidth();
         }
     }
+
     public void jump() {
         System.out.println("Trying to jump. canJump=" + canJump + ", isJumping=" + isJumping);
         if (canJump) {
@@ -210,6 +209,7 @@ public class GameCharacter extends Pane {
         }
         return false;
     }
+
 
     public void collapsed() {
         this.imageView.setFitWidth((int) (this.getWidth() * 2));
@@ -347,6 +347,10 @@ public class GameCharacter extends Pane {
     public void setStageManager(StageManager stageManager) {
         this.stageManager = stageManager;
     }
+    public StageManager getStageManager() {
+        return stageManager;
+    }
+
 
 }
 
