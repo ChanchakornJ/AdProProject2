@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import se233.project2.Launcher;
+import se233.project2.controller.BulletManager;
 
 
 public class Boss extends Pane {
@@ -16,6 +17,8 @@ public class Boss extends Pane {
     int hp = 20;
     boolean alive = true;
     private Image bossImage;
+    private long lastShotTime = 0;
+
 
 
 
@@ -38,8 +41,16 @@ public class Boss extends Pane {
 
     void update() {
         x += speed;
+        long now = System.currentTimeMillis();
+        if(now - lastShotTime > 1500){
+            double bulletX = getTranslateX();
+            double bulletY = getTranslateY() + getHeight() / 2;
+//            BulletManager.shoot(bulletX, bulletY, false, false);
+            lastShotTime = now;
+        }
         if (x < 400 || x > 700) speed *= -1; // patrol
     }
+
     public Rectangle2D getHitBox() {
         double hitX = getTranslateX() + w * 0.25;
         double hitY = getTranslateY() + h * 0.3;

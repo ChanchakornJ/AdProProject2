@@ -45,6 +45,7 @@ public class GameCharacter extends Pane {
     private int lastX;
     private int lastY;
     private int hp = 5;
+    private int lives = 3;
 
     //Bullet
     private List<Bullet> bullets = new ArrayList<>();
@@ -91,6 +92,7 @@ public class GameCharacter extends Pane {
         isMoveRight = false;
         xVelocity = 0;
     }
+
 
     public void moveX() {
         setTranslateX(x);
@@ -207,8 +209,10 @@ public class GameCharacter extends Pane {
     }
 
     public void collapsed() {
-        this.imageView.setFitHeight(5);
-        this.y = this.y + this.characterHeight - 5;
+        this.imageView.setFitWidth((int) (this.getWidth() * 2));
+        this.imageView.setFitHeight((int) (this.getHeight() * 2));
+        this.y = 5;
+
         this.repaint();
         try {
             TimeUnit.MILLISECONDS.sleep(300);
@@ -220,8 +224,8 @@ public class GameCharacter extends Pane {
     public void respawn() {
         this.x = this.startX;
         this.y = this.startY;
-        this.imageView.setFitWidth(this.characterWidth);
-        this.imageView.setFitHeight(this.characterHeight);
+        this.imageView.setFitWidth(this.characterWidth * 2);
+        this.imageView.setFitHeight(this.characterHeight * 2);
         this.isMoveLeft = false;
         this.isMoveRight = false;
         this.isFalling = true;
@@ -326,6 +330,11 @@ public class GameCharacter extends Pane {
     public void takeDamage() {
         hp--;
         if (hp <= 0) {
+            lives--;
+            if(lives <=0){
+                javafx.application.Platform.exit();
+            }
+            hp = 5;
             respawn();
         }
     }
