@@ -110,11 +110,22 @@ public class GameStage extends Pane {
     }
 
     public static GameStage stage2() {
-        GameStage stage = new GameStage();
-        stage.boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss2.png");
-        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
-        return stage;
+        GameStage stage2 = new GameStage();
+        stage2.getChildren().clear();
+
+        stage2.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage2.png"));
+        ImageView bg = new ImageView(stage2.gameStageImg);
+        bg.setFitWidth(WIDTH);
+        bg.setFitHeight(HEIGHT);
+        stage2.getChildren().add(bg);
+
+        // rebuild entities
+        stage2.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage2.getBulletManager());
+        stage2.getChildren().add(stage2.boss);
+
+        return stage2;
     }
+
 
 
 
