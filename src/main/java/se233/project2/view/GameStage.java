@@ -67,7 +67,7 @@ public class GameStage extends Pane {
         minions.add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", bulletManager));
 
 
-        boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss1.png");
+        boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss1.png", bulletManager);
         scoreList.add(new Score(30, GROUND + 30));
         scoreList.add(new Score(GameStage.WIDTH - 60, GROUND + 30));
         getChildren().add(backgroundImg);
@@ -106,11 +106,9 @@ public class GameStage extends Pane {
     public List<Minion> getMinions() { return minions; }
 
     public static GameStage stage1() {
-        GameStage stage = new GameStage();
-        stage.boss = new Boss(450.0, 60.0, 350.0, 350.0, 0.0, 10, "assets/Boss1.png");
-        stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
-        return stage;
+        return new GameStage(); 
     }
+
 
 
 
