@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import se233.project2.Launcher;
 
-public class FlyingMinion extends Pane {
+public class FlyingMinion extends Minion {
     private double x, y, w, h;
     private double baseY;
     private double amplitude = 30; // ความสูงของการบินขึ้นลง
@@ -17,6 +17,7 @@ public class FlyingMinion extends Pane {
     private Image image;
 
     public FlyingMinion(double startX, double startY, double width, double height, String imgPath) {
+        super();
         this.x = startX;
         this.y = startY;
         this.w = width;

@@ -348,11 +348,6 @@ public class GameCharacter extends Pane {
         this.stageManager = stageManager;
     }
 
-
-
-
-
-
 }
 
 
