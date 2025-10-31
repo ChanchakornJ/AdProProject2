@@ -126,7 +126,7 @@ public class GameStage extends Pane {
 
         // Boss
         stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager);
-        stage.boss.setAnimationConfig(3, 1, 60);  // 6 frames, faster animation
+        stage.boss.setAnimationConfig(3, 1, 150);  // 6 frames, faster animation
         stage.getChildren().add(stage.boss);
 
         // Player
