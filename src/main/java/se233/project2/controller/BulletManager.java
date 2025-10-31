@@ -15,7 +15,7 @@ public class BulletManager {
     private final Image bulletImg = new Image(Launcher.class.getResourceAsStream("assets/Bullet.png"));
     private final double bulletSpeed = 6;
 
-    public static class BulletMeta {
+    public class BulletMeta {
         public double speed;
         public boolean fromPlayer;
         public BulletMeta(double speed, boolean fromPlayer) {
