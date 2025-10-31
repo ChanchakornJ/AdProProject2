@@ -6,6 +6,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se233.project2.controller.BulletManager;
+import se233.project2.model.Bullet;
 import se233.project2.model.GameCharacter;
 import se233.project2.model.Platform;
 import se233.project2.view.GameStage;
@@ -15,14 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class PlayerTest {
     Field xVelocityField, yVelocityField, yAccelerationField,canJumpField,isJumpingField,isFallingField,yMaxVelocityField;
     private GameCharacter gameCharacter;
+    private BulletManager bulletManager;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException {
+        bulletManager = new BulletManager();
         gameCharacter = new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE);
+        gameCharacter.setBulletManager(bulletManager);
 
         isFallingField = gameCharacter.getClass().getDeclaredField("isFalling");
         isJumpingField = gameCharacter.getClass().getDeclaredField("isJumping");
@@ -280,8 +286,8 @@ public class PlayerTest {
 
         assertEquals(GameStage.GROUND - gameCharacter.getCharacterHeight(), gameCharacter.getY(),
                 "y should be clamped to ground level");
-        assertFalse(isFallingField.getBoolean(gameCharacter), "isFalling should be false after hitting the ground");
-        assertTrue(canJumpField.getBoolean(gameCharacter), "canJump should be true after hitting the ground");
+        assertFalse(isFallingField.getBoolean(gameCharacter), "isFalling should be false after hitting the ground.");
+        assertTrue(canJumpField.getBoolean(gameCharacter), "canJump should be true after hitting the ground..");
         assertEquals(0, yVelocityField.getInt(gameCharacter), "yVelocity should be 0 after hitting the ground");
     }
 
@@ -561,5 +567,36 @@ public class PlayerTest {
         assertFalse(isJumpingField.getBoolean(gameCharacter), "isJumping should be false.");
     }
 
+    @Test
+    void testShootAddsBullet() {
+        // shoot once
+        gameCharacter.shoot();
+
+        assertEquals(1, bulletManager.getBullets().size(), "Shooting should add one bullet");
+
+        Bullet bullet = bulletManager.getBullets().get(0);
+        assertTrue(bullet.fromPlayer, "Bullet should be from the player");
+        assertEquals(100 + 50, bullet.x, 0.01, "Bullet X position should match startX");
+        assertEquals(200 + 80 / 2.0, bullet.y, 0.01, "Bullet Y position should match startY");
+    }
+
+    @Test
+    void testShootCooldown() throws InterruptedException {
+        // first shot
+        gameCharacter.shoot();
+
+        // immediately shoot again
+        gameCharacter.shoot();
+
+        // should only have one bullet due to cooldown
+        assertEquals(1, bulletManager.getBullets().size(), "Cooldown should prevent rapid fire");
+
+        // simulate cooldown passed
+        Thread.sleep(gameCharacter.getShootCooldown() / 1_000_000 + 1); // nano to millis
+        gameCharacter.shoot();
+
+        // now there should be two bullets
+        assertEquals(2, bulletManager.getBullets().size(), "Bullet should be added after cooldown");
+    }
 }
 
