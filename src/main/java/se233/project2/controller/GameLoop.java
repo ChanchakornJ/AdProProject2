@@ -57,6 +57,12 @@ public class GameLoop {
 
         gameStage.getBulletManager().update();
 
+        Boss boss = gameStage.getBoss();
+        if (boss != null && boss.isAlive()) {
+            boss.update(); // pass in timestamp for animation
+        }
+
+
         for (Minion m : gameStage.getMinions()) {
             if (m.isAlive()) m.update();
         }
