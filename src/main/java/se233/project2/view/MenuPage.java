@@ -1,6 +1,7 @@
 package se233.project2.view;
 
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,7 +29,7 @@ public class MenuPage extends StackPane {
         try {
             bgImage = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
             if (bgImage == null) {
-                throw new CustomException("Background image unavailable.");
+                throw new Exception("Background image unavailable.");
             }
 
             ImageView bg = new ImageView(bgImage);
@@ -38,7 +39,7 @@ public class MenuPage extends StackPane {
             getChildren().add(bg);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Background image unavailable.");
         }
 
 

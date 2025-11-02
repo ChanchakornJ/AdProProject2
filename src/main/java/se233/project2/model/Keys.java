@@ -18,4 +18,9 @@ public class Keys {
     public boolean isPressed(KeyCode key) {
         return keys.getOrDefault(key,false);
     }
+
+    public void clear() {
+        keys.clear();
+    }
+
 }

@@ -11,7 +11,7 @@ import se233.project2.Launcher;
 public class GameWinPage extends StackPane {
     private Font arcadeFont;
 
-    public GameWinPage() {
+    public GameWinPage()  {
         setPrefSize(GameStage.WIDTH, GameStage.HEIGHT);
 
         arcadeFont = Font.loadFont(getClass().getResourceAsStream("/se233/project2/assets/PressStart2P-Regular.ttf"), 24);
@@ -23,7 +23,7 @@ public class GameWinPage extends StackPane {
         try {
             bgImage = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
             if (bgImage == null) {
-                System.out.println("Background image unavailable.");
+                throw new Exception("Background image unavailable.");
             }
 
             ImageView bg = new ImageView(bgImage);
@@ -33,7 +33,7 @@ public class GameWinPage extends StackPane {
             getChildren().add(bg);
 
         } catch (Exception e) {
-           e.printStackTrace();
+//            throw new Exception("Background image unavailable.", e);
         }
 
         StackPane overlay = new StackPane();

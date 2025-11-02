@@ -15,7 +15,7 @@ import se233.project2.controller.StageManager;
 public class GameOverPage extends StackPane {
     private Font arcadeFont;
 
-    public GameOverPage(StageManager stageManager) throws CustomException {
+    public GameOverPage(StageManager stageManager)  {
 
         setPrefSize(GameStage.WIDTH, GameStage.HEIGHT);
 
@@ -28,7 +28,7 @@ public class GameOverPage extends StackPane {
         try {
             bgImage = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
             if (bgImage == null) {
-                throw new CustomException("Background image unavailable.");
+                throw new IllegalStateException("Background image failed to load.");
             }
 
             ImageView bg = new ImageView(bgImage);
@@ -38,7 +38,7 @@ public class GameOverPage extends StackPane {
             getChildren().add(bg);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalStateException("Background image unavailable.", e);
         }
 
         StackPane overlay = new StackPane();
