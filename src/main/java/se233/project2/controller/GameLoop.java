@@ -69,9 +69,9 @@ public class GameLoop {
         for (Minion m : gameStage.getMinions()) {
             if (m.isAlive()) m.update();
         }
-        if (gameStage.getBoss() != null) {
-            gameStage.getBoss().update();
-        }
+//        if (gameStage.getBoss() != null) {
+//            gameStage.getBoss().update();
+//        }
 
         if (!minionSpawned && !gameStage.getBulletManager().getBullets().isEmpty()) {
             for (Minion m : gameStage.getMinions()) {
@@ -111,6 +111,7 @@ public class GameLoop {
         for (GameCharacter g : list) {
             g.repaint();
         }
+
     }
 
     private void checkBulletBossCollision(GameStage gameStage) {
@@ -175,24 +176,30 @@ public class GameLoop {
         Boss boss = gameStage.getBoss();
         if (boss == null || !boss.isAlive()) return;
 
+        Rectangle2D bossBox = boss.getSpriteBounds();
+
         for (GameCharacter player : gameStage.getGameCharacterList()) {
-            Rectangle2D bossBox = boss.getHitBox();
-            Rectangle2D playerBox = new Rectangle2D(
-                    player.getTranslateX(),
-                    player.getTranslateY(),
-                    player.getCharacterWidth(),
-                    player.getCharacterHeight()
-            );
+            Rectangle2D playerBox = player.getSpriteBounds();
 
             if (playerBox.intersects(bossBox)) {
-                if (player.getTranslateX() < boss.getTranslateX()) {
-                    player.setTranslateX(boss.getTranslateX() - player.getCharacterWidth());
+                double pushLeft  = playerBox.getMaxX() - bossBox.getMinX();
+                double pushRight = bossBox.getMaxX() - playerBox.getMinX();
+
+                if (pushLeft < pushRight) {
+                    player.setTranslateX(player.getTranslateX() - pushLeft);
                 } else {
-                    player.setTranslateX(boss.getTranslateX() + boss.getWidth());
+                    player.setTranslateX(player.getTranslateX() + pushRight);
                 }
+                player.stopHorizontal();
             }
         }
     }
+
+
+
+
+
+
 
 
     private void checkBulletPlayerCollision(GameStage gameStage) {
