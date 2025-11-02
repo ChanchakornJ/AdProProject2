@@ -32,26 +32,26 @@ public class StageManager {
             heartsUI = new HeartsUI(3);
         }
         if (sessionScoreUI == null) {
-            sessionScoreUI = new SessionScoreUI(); // created once, reused always
+            sessionScoreUI = new SessionScoreUI();
         }
 
         currentStage = num;
 
         switch (num) {
 
-            case 0: // Menu
+            case 0:
                 MenuPage menuPage = new MenuPage(this);
                 scene = new Scene(menuPage, GameStage.WIDTH, GameStage.HEIGHT);
                 window.setScene(scene);
                 break;
 
-            case 1: // Stage 1 (fresh run)
+            case 1:
                 if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage1 = GameStage.stage1();
                 player.setStageManager(this);
                 player.resetLives();
-                player.resetSessionScore(); // ✅ reset only when restarting at stage 1
+                player.resetSessionScore();
                 heartsUI.updateHearts(3);
                 player.respawnToStart();
 
@@ -60,13 +60,13 @@ public class StageManager {
                 setupStage(stage1);
                 break;
 
-            case 2: // Stage 2 (carry lives + score)
+            case 2:
                 if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage2 = GameStage.stage2();
                 player.setStageManager(this);
-                heartsUI.updateHearts(player.getLives()); // ✅ keep lives
-                sessionScoreUI.update(player.getSessionScore()); // ✅ carry score
+                heartsUI.updateHearts(player.getLives());
+                sessionScoreUI.update(player.getSessionScore());
                 player.respawnToStart();
 
                 setupStage(stage2);

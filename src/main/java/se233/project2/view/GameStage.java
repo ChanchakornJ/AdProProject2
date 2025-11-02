@@ -60,7 +60,7 @@ public class GameStage extends Pane {
 
 
         // Platforms
-        stage.getPlatforms().add(new Platform(0, 320, 700, 100)); // ground
+        stage.getPlatforms().add(new Platform(0, 320, 800, 100)); // ground
         stage.getPlatforms().add(new Platform(0, 150, 150, 40));
         stage.getPlatforms().add(new Platform(0, 240, 150, 40));
         stage.getPlatforms().add(new Platform(180, 220, 40, 100));
@@ -121,10 +121,8 @@ public class GameStage extends Pane {
         stage.setStageNumber(2);
 
         // Platforms for stage2 (can be different)
-        stage.getPlatforms().add(new Platform(0, 300, 500, 100)); // ground
-        // add more if needed
+        stage.getPlatforms().add(new Platform(0, 300, 700, 100)); // ground
 
-        // Draw platforms
         for (Platform p : stage.getPlatforms()) {
             javafx.scene.shape.Rectangle rect =
                     new javafx.scene.shape.Rectangle(p.getX(), p.getY(), p.getWidth(), p.getHeight());
