@@ -20,13 +20,13 @@ public class ExceptionHandler {
     public static void handleException(Exception e) {
         e.printStackTrace();
 
-        Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Application Error");
-            alert.setHeaderText("An error occurred!");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        });
+//        Platform.runLater(() -> {
+//            Alert alert = new Alert(AlertType.ERROR);
+//            alert.setTitle("Application Error");
+//            alert.setHeaderText("An error occurred!");
+//            alert.setContentText(e.getMessage());
+//            alert.showAndWait();
+//        });
     }
 
     public static void registerGlobalHandler() {
