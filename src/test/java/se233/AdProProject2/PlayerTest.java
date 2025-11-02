@@ -2,6 +2,7 @@ package se233.AdProProject2;
 
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +27,11 @@ public class PlayerTest {
 
     @BeforeEach
     void setUp() throws NoSuchFieldException {
-//        bulletManager = new BulletManager();
+        Pane root = new Pane();
+        bulletManager = new BulletManager(root);
         gameCharacter = new GameCharacter(0, 30, 30, "assets/Character.png", 6, 6, 1, 65, 64, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.DOWN, KeyCode.SPACE);
         gameCharacter.setBulletManager(bulletManager);
+         // or however you normally create it
 
         isFallingField = gameCharacter.getClass().getDeclaredField("isFalling");
         isJumpingField = gameCharacter.getClass().getDeclaredField("isJumping");

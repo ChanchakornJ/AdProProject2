@@ -106,7 +106,7 @@ public class Minion extends Pane {
 
     }
 
-    private void die() {
+    public void die() {
         alive = false;
         Pane parent = (Pane) getParent();
         if (parent != null) {
@@ -123,5 +123,13 @@ public class Minion extends Pane {
 
     public Rectangle2D getHitBox() {
         return new Rectangle2D(getTranslateX(), getTranslateY(), w, h);
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int i) {
+        this.hp = i;
     }
 }
