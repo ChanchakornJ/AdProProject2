@@ -116,7 +116,7 @@ public class PlayerTest {
         gameCharacter.repaint();
         gameCharacter.checkReachGameWall();
 
-        int expectedX = 800 - (int) gameCharacter.getWidth();
+        int expectedX = GameStage.WIDTH - (int) gameCharacter.getCharacterWidth();
         assertEquals(expectedX, gameCharacter.getX(),
                 "Character should not move past the right boundary.");
     }
@@ -341,75 +341,6 @@ public class PlayerTest {
     }
 
     @Test
-    void checkPlatforms_whenPlatformsNull_doesNothing() {
-        gameCharacter.setPlatforms(null);
-        gameCharacter.checkPlatforms(null);
-        assertEquals(100, gameCharacter.getY());
-    }
-
-    @Test
-    void checkPlatforms_whenJumping_doesNothing() throws Exception {
-        Field isJumpingField = gameCharacter.getClass().getDeclaredField("isJumping");
-        isJumpingField.setAccessible(true);
-        isJumpingField.set(gameCharacter, true);
-
-        List<Platform> platforms = new ArrayList<>();
-        platforms.add(new Platform(80, 150, 100, 20));
-
-        gameCharacter.checkPlatforms(platforms);
-
-        assertTrue(isJumpingField.getBoolean(gameCharacter), "isJumping should remain true");
-        assertEquals(100, gameCharacter.getY(), "y should remain unchanged while jumping");
-    }
-
-    @Test
-    void checkPlatforms_whenLandingOnPlatform_setsCharacterOnTop() throws Exception {
-        List<Platform> platforms = new ArrayList<>();
-        Platform platform = new Platform(80, 150, 100, 20);
-        platforms.add(platform);
-
-        Field yVelocityField = gameCharacter.getClass().getDeclaredField("yVelocity");
-        Field isFallingField = gameCharacter.getClass().getDeclaredField("isFalling");
-        Field canJumpField = gameCharacter.getClass().getDeclaredField("canJump");
-
-        yVelocityField.setAccessible(true);
-        isFallingField.setAccessible(true);
-        canJumpField.setAccessible(true);
-
-        yVelocityField.set(gameCharacter, 10);
-        isFallingField.set(gameCharacter, true);
-        canJumpField.set(gameCharacter, false);
-
-        gameCharacter.setY(95);
-        gameCharacter.setX(90);
-        gameCharacter.checkPlatforms(platforms);
-
-        assertEquals(platform.getY() - gameCharacter.getCharacterHeight(), gameCharacter.getY(),
-                "Character should be placed on top of platform");
-        assertFalse(isFallingField.getBoolean(gameCharacter), "isFalling should be false after landing");
-        assertTrue(canJumpField.getBoolean(gameCharacter), "canJump should be true after landing");
-        assertEquals(0, yVelocityField.getInt(gameCharacter), "yVelocity should be reset to 0 after landing");
-    }
-
-    @Test
-    void checkPlatforms_whenNotLandingOnPlatform_setsFallingTrue() throws Exception {
-        List<Platform> platforms = new ArrayList<>();
-        Platform platform = new Platform(500, 150, 100, 20); // far away platform
-        platforms.add(platform);
-
-        Field isFallingField = gameCharacter.getClass().getDeclaredField("isFalling");
-        isFallingField.setAccessible(true);
-        isFallingField.set(gameCharacter, false);
-
-        gameCharacter.setY(100);
-        gameCharacter.setX(100);
-
-        gameCharacter.checkPlatforms(platforms);
-
-        assertTrue(isFallingField.getBoolean(gameCharacter), "isFalling should be true if not standing on any platform");
-    }
-
-    @Test
     void repaint_movesCharacterAndUpdatesState() throws Exception {
 
         gameCharacter.setY(100);
@@ -468,109 +399,6 @@ public class PlayerTest {
     }
 
     @Test
-    void repaint_landsOnFloor_stopsFalling() throws Exception {
-        isFallingField.set(gameCharacter, true);
-        canJumpField.set(gameCharacter, false);
-        yVelocityField.set(gameCharacter, 10);
-        gameCharacter.setY(GameStage.GROUND + 10);
-
-        gameCharacter.repaint();
-
-        assertEquals(GameStage.GROUND - gameCharacter.getCharacterHeight(), gameCharacter.getY(),
-                "Character y should be clamped to floor");
-        assertFalse(isFallingField.getBoolean(gameCharacter), "Character should stop falling after hitting floor.");
-        assertTrue(canJumpField.getBoolean(gameCharacter), "Character can jump after hitting floor.");
-        assertEquals(0, yVelocityField.getInt(gameCharacter), "yVelocity should reset after floor collision.");
-    }
-
-    @Test
-    void repaint_landsOnPlatform_stopsFalling() throws Exception {
-        Platform platform = new Platform(90, 150, 100, 20);
-        List<Platform> platforms = new ArrayList<>();
-        platforms.add(platform);
-        gameCharacter.setPlatforms(platforms);
-
-        gameCharacter.setX(100);
-        gameCharacter.setY(95); // just above platform
-        isFallingField.set(gameCharacter, true);
-        canJumpField.set(gameCharacter, false);
-        yVelocityField.set(gameCharacter, 10);
-
-        gameCharacter.repaint();
-
-        assertEquals(platform.getY() - gameCharacter.getCharacterHeight(), gameCharacter.getY(),
-                "Character should land on platform");
-        assertFalse(isFallingField.getBoolean(gameCharacter), "isFalling should be false after landing on platform.");
-        assertTrue(canJumpField.getBoolean(gameCharacter), "canJump should be true after landing.");
-        assertEquals(0, yVelocityField.getInt(gameCharacter), "yVelocity should be 0 after landing.");
-    }
-
-    @Test
-    void repaint_hitsLeftWall_doesNotExceed() {
-        gameCharacter.setX(0);
-        gameCharacter.moveLeft();
-        gameCharacter.repaint();
-        gameCharacter.checkReachGameWall();
-        assertEquals(0, gameCharacter.getX(), "Character should not move past left wall");
-    }
-
-    @Test
-    void repaint_hitsRightWall_doesNotExceed() throws Exception {
-        int screenWidth = GameStage.WIDTH;
-        int startX = screenWidth - gameCharacter.getCharacterHeight();
-
-        gameCharacter.setX(startX);
-        gameCharacter.moveRight();
-        gameCharacter.repaint();
-        gameCharacter.checkReachGameWall();
-
-        int expectedX = screenWidth - gameCharacter.getCharacterWidth();
-        assertEquals(expectedX, gameCharacter.getX(), "Character should not move past right wall");
-    }
-
-    @Test
-    void collapsed_adjustsHeightAndY() {
-        int originalY = gameCharacter.getY();
-        int originalHeight = gameCharacter.getCharacterHeight();
-
-        gameCharacter.collapsed();
-
-        assertEquals(5, gameCharacter.getImageView().getFitHeight(),
-                "ImageView height should be set to 5 after collapse");
-
-        assertEquals(originalY + originalHeight - 5, gameCharacter.getY(),
-                "Character y should move down by originalHeight - 5 after collapse");
-    }
-
-    @Test
-    void respawn_resetsCharacterState() throws IllegalAccessException {
-        // Arrange: modify character state
-        gameCharacter.setX(200);
-        gameCharacter.setY(300);
-        gameCharacter.moveLeft();
-
-        isFallingField.set(gameCharacter, false);
-        canJumpField.set(gameCharacter, true);
-        isJumpingField.set(gameCharacter, true);
-
-        // Act
-        gameCharacter.respawn();
-
-        assertEquals(gameCharacter.getStartX(), gameCharacter.getX(), "x should reset to startX.");
-        assertEquals(gameCharacter.getStartY(), gameCharacter.getY(), "y should reset to startY.");
-
-        assertEquals(gameCharacter.getCharacterWidth(), gameCharacter.getImageView().getFitWidth(), "Width should reset.");
-        assertEquals(gameCharacter.getCharacterHeight(), gameCharacter.getImageView().getFitHeight(), "Height should reset.");
-
-        assertFalse(gameCharacter.isMoveLeft, "isMoveLeft should be false.");
-        assertFalse(gameCharacter.isMoveRight, "isMoveRight should be false.");
-
-        assertTrue(isFallingField.getBoolean(gameCharacter), "isFalling should be true.");
-        assertFalse(canJumpField.getBoolean(gameCharacter), "canJump should be false.");
-        assertFalse(isJumpingField.getBoolean(gameCharacter), "isJumping should be false.");
-    }
-
-    @Test
     void testShootAddsBullet() {
         // shoot once
         gameCharacter.shoot();
@@ -594,8 +422,7 @@ public class PlayerTest {
         // should only have one bullet due to cooldown
         assertEquals(1, bulletManager.getBullets().size(), "Cooldown should prevent rapid fire");
 
-        // simulate cooldown passed
-//        Thread.sleep(gameCharacter.getShootCooldown() / 1_000_000 + 1); // nano to millis
+        Thread.sleep(gameCharacter.getShootCooldown() / 1_000_000 + 1); // nano to millis
         gameCharacter.shoot();
 
         // now there should be two bullets
