@@ -72,10 +72,12 @@ public class FlyingMinion extends Minion {
         if (x < -w) {
             x = 800 + Math.random() * 200; // เริ่มใหม่ทางขวา
             baseY = 100 + Math.random() * 200; // random ความสูง
+            y = baseY;
         }
 
         setTranslateX(x);
         setTranslateY(y);
+        animate();
     }
 
 
@@ -139,6 +141,26 @@ public class FlyingMinion extends Minion {
         frameHeight = image.getHeight() / totalRows;
         sprite.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
+    private void animate() {
+        long now = System.currentTimeMillis();
+        if (now - lastFrameTime < frameDelay) return;
+        lastFrameTime = now;
+
+        frame = (frame + 1) % (totalCols * totalRows);
+
+        int col = frame % totalCols;
+        int row = frame / totalCols;
+
+        sprite.setViewport(new Rectangle2D(
+                col * frameWidth,
+                row * frameHeight,
+                frameWidth,
+                frameHeight
+        ));
+    }
+
+
+
 
     public Node getImageView() {
         return sprite;

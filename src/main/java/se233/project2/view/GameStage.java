@@ -23,6 +23,8 @@ public class GameStage extends Pane {
     private List<Platform> platforms;
     private BulletManager bulletManager;
     private static Boss boss;
+    private static Boss boss2;
+
     private List<Minion> minions;
 
     public GameStage() {
@@ -115,6 +117,8 @@ public class GameStage extends Pane {
     }
 
     public static GameStage stage2() {
+        boss = null;
+
         GameStage stage = new GameStage();
         // Platforms for stage2 (can be different)
         stage.getPlatforms().add(new Platform(0, 300, 500, 100)); // ground
@@ -142,8 +146,10 @@ public class GameStage extends Pane {
 
         // Boss
         stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager, null);
-        stage.boss.setAnimationConfig(3, 1, 150);  // 6 frames, faster animation
+        stage.boss.setAnimationConfig(2, 1, 120);  // 6 frames, faster animation
         stage.getChildren().add(stage.boss);
+        stage.boss.toFront();
+
 
         // Player
         GameCharacter player = new GameCharacter(
