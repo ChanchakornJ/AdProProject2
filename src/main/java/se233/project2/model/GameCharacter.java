@@ -337,6 +337,7 @@ public class GameCharacter extends Pane {
         this.facingRight = facingRight;
     }
     public void takeDamage() {
+
         hp--;
         if (hp <= 0) {
             lives--;

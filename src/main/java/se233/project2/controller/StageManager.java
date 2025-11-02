@@ -2,7 +2,6 @@ package se233.project2.controller;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import se233.project2.view.GameOverPage;
 import se233.project2.view.GameStage;
 import se233.project2.view.MenuPage;
 
@@ -25,6 +24,9 @@ public class StageManager {
 
             case 1: // Game stage
                 GameStage stage1 = GameStage.stage1();
+                for (GameCharacter p : stage1.getGameCharacterList()) {
+                    p.setStageManager(this);
+                }
                 scene = new Scene(stage1, GameStage.WIDTH, GameStage.HEIGHT);
                 scene.setOnKeyPressed(event -> stage1.getKeys().add(event.getCode()));
                 scene.setOnKeyReleased(event -> stage1.getKeys().remove(event.getCode()));
@@ -34,6 +36,9 @@ public class StageManager {
 
             case 2: // Game stage
                 GameStage stage2 = GameStage.stage2();
+                for (GameCharacter p : stage2.getGameCharacterList()) {
+                    p.setStageManager(this);
+                }
                 scene = new Scene(stage2, GameStage.WIDTH, GameStage.HEIGHT);
                 scene.setOnKeyPressed(event -> stage2.getKeys().add(event.getCode()));
                 scene.setOnKeyReleased(event -> stage2.getKeys().remove(event.getCode()));
@@ -43,6 +48,9 @@ public class StageManager {
 
             case 3: // Game stage
                 GameStage stage3 = GameStage.stage3();
+                for (GameCharacter p : stage3.getGameCharacterList()) {
+                    p.setStageManager(this);
+                }
                 scene = new Scene(stage3, GameStage.WIDTH, GameStage.HEIGHT);
                 scene.setOnKeyPressed(event -> stage3.getKeys().add(event.getCode()));
                 scene.setOnKeyReleased(event -> stage3.getKeys().remove(event.getCode()));
