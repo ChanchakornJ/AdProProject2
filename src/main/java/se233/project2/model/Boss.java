@@ -188,33 +188,69 @@ public class Boss extends Pane {
         );
     }
     public void explodeAt(Rectangle2D box) {
-        ImageView explosion = new ImageView(
-                new Image(Launcher.class.getResourceAsStream("assets/BossBullet.png"))
-        );
+        Image spriteSheet = new Image(Launcher.class.getResourceAsStream("assets/Explosion.png"));
+        ImageView explosion = new ImageView(spriteSheet);
 
-        explosion.setX(box.getMinX());
-        explosion.setY(box.getMinY());
-        explosion.setFitWidth(box.getWidth());
-        explosion.setFitHeight(box.getHeight());
 
-        Pane root = (Pane) getParent(); // GameStage
+        // 🔹 ใส่ข้อมูลพิกัดและขนาดของแต่ละเฟรม (ต้องใส่ให้ตรงกับ sprite sheet จริง)
+        // ตัวอย่างการกำหนด rectangle ของแต่ละเฟรม
+        Rectangle2D[] frames = {
+                new Rectangle2D(0, 0, 8, 32),
+                new Rectangle2D(9, 0, 8, 32),
+                new Rectangle2D(18, 0, 8, 32),
+                new Rectangle2D(27, 0, 8, 32),
+                new Rectangle2D(36, 0, 16, 32),
+                new Rectangle2D(53, 0, 32, 32),
+                new Rectangle2D(86, 0, 24, 32),
+                new Rectangle2D(111, 0, 16, 32)
+        };
+
+
+        explosion.setViewport(frames[0]);
+        explosion.setViewport(frames[0]);
+
+        explosion.setPreserveRatio(true);
+        explosion.setFitWidth(frames[0].getWidth() * 10);   // 2 เท่าของเฟรม
+        explosion.setFitHeight(frames[0].getHeight() * 10);
+
+        explosion.setX(box.getMinX() + (box.getWidth() / 2) - (explosion.getFitWidth() / 2));
+        explosion.setY(box.getMinY() + (box.getHeight() / 2) - (explosion.getFitHeight() / 2));
+
+        Pane root = (Pane) getParent();
         root.getChildren().add(explosion);
 
-        new Timeline(
-                new KeyFrame(Duration.millis(400),
-                        e -> root.getChildren().remove(explosion))
-        ).play();
+        Timeline anim = new Timeline();
+        for (int i = 0; i < frames.length; i++) {
+            int index = i;
+            anim.getKeyFrames().add(
+                    new KeyFrame(Duration.millis(i * 100),
+                            e -> {
+                                Rectangle2D frame = frames[index];
+                                explosion.setViewport(frame);
+                                explosion.setX(box.getMinX() + (box.getWidth() / 2) - (frame.getWidth() / 2));
+                                explosion.setY(box.getMinY() + (box.getHeight() / 2) - (frame.getHeight() / 2));
+                            }
+                    )
+            );
+        }
+
+        anim.getKeyFrames().add(new KeyFrame(Duration.millis(frames.length * 100 + 100),
+                e -> root.getChildren().remove(explosion)));
+
+        anim.play();
     }
+
 
     public boolean allHitPartsDestroyed() {
         return hitParts.stream().allMatch(p -> p.destroyed);
     }
 
     public void showHitEffect(Pane root, double x, double y) {
-        Image spriteSheet = new Image(Launcher.class.getResourceAsStream("assets/hit_effect.png"));
+        Image spriteSheet = new Image(Launcher.class.getResourceAsStream("assets/shootEffect.png"));
 
-        int frameWidth = 64;   // ความกว้างต่อเฟรม
-        int frameHeight = 64;  // ความสูงต่อเฟรม
+        int totalFrames = 3; // มี 3 เฟรมในแนวนอน
+        double frameWidth = spriteSheet.getWidth() / totalFrames;
+        double frameHeight = spriteSheet.getHeight();
 
         ImageView effect = new ImageView(spriteSheet);
         effect.setTranslateX(x - frameWidth / 2.0);
@@ -301,6 +337,8 @@ public class Boss extends Pane {
         var b = sprite.localToScene(sprite.getBoundsInLocal());
         return new Rectangle2D(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
+
+
 
 
 
