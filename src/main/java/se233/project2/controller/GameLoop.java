@@ -41,6 +41,7 @@ public class GameLoop {
             boolean right = gameStage.getKeys().isPressed(c.getRightKey());
             boolean up = gameStage.getKeys().isPressed(c.getUpKey());
             boolean shoot = gameStage.getKeys().isPressed(c.getShootKey());
+            boolean down = gameStage.getKeys().isPressed(c.getDownKey());
 
             if (left && right) c.stop();
             else if (left) {
@@ -57,6 +58,7 @@ public class GameLoop {
             if (left) c.setFacingRight(false);
             if (right) c.setFacingRight(true);
             if (shoot) c.shoot();
+            if (down) c.prone();
         }
 
         gameStage.getBulletManager().update();

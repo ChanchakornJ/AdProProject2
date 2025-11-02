@@ -24,8 +24,8 @@ public class StageManager {
         if (player == null) {
             player = new GameCharacter(
                     0, 30, 30, "assets/Character.png",
-                    6, 6, 1, 65, 64,
-                    KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
+                    32, 16, 2, 65, 64,
+                    KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP,KeyCode.DOWN, KeyCode.SPACE
             );
         }
         if (heartsUI == null) {
