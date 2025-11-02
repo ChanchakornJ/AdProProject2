@@ -174,7 +174,6 @@ public class GameStage extends Pane {
             stage.getChildren().add(rect);
         }
 
-
         // Background
         stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage3.png"));
         ImageView bg = new ImageView(stage.gameStageImg);
@@ -182,12 +181,11 @@ public class GameStage extends Pane {
         bg.setFitHeight(HEIGHT);
         stage.getChildren().add(bg);
 
-
         // Bullet manager
         stage.bulletManager = new BulletManager(stage);
 
         // Boss
-        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss3.png", stage.bulletManager);
+        stage.boss = new Boss(450, 150, 150, 150, 0.0, 10, "assets/Boss3.png", stage.bulletManager);
         stage.boss.setAnimationConfig(6, 1, 70);  // 6 frames, faster animation
         stage.getChildren().add(stage.boss);
 
@@ -203,9 +201,10 @@ public class GameStage extends Pane {
         stage.getGameCharacterList().add(player);
         stage.getChildren().add(player);
 
-        for (int i = 0; i < 5; i++) {
+        //Minion
+        for (int i = 0; i < 10; i++) {
             FlyingMinion fm = new FlyingMinion(
-                    800 + i * 150,
+                    800 + i * 120,
                     100 + i * 40,
                     60, 60,
                     "assets/FlyingMinion.png"

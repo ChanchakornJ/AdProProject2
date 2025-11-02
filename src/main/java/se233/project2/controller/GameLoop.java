@@ -80,12 +80,28 @@ public class GameLoop {
             minionSpawned = true;
         }
 
+//        for (Minion m : gameStage.getMinions()) {
+//            if (m instanceof FlyingMinion fm && fm.isAlive()) {
+//                fm.update();
+//            } else if (m.isAlive()) {
+//                m.update();
+//            }
+//        }
+
+        // Update all existing minions
         for (Minion m : gameStage.getMinions()) {
-            if (m instanceof FlyingMinion fm && fm.isAlive()) {
-                fm.update();
-            } else if (m.isAlive()) {
-                m.update();
-            }
+            if (m.isAlive()) m.update();
+        }
+
+// Continuous spawn: generate new FlyingMinions
+        long flyingCount = gameStage.getMinions()
+                .stream()
+                .filter(m -> m instanceof FlyingMinion && m.isAlive())
+                .count();
+
+// Example: max 8 on screen at once, 2% chance per frame to spawn
+        if (flyingCount < 8 && Math.random() < 0.02) {
+            spawnFlyingMinion();
         }
 
 
@@ -97,6 +113,24 @@ public class GameLoop {
 
 
     }
+
+    private void spawnFlyingMinion() {
+        // Create a new FlyingMinion with dummy initial values (constructor still needs them)
+        FlyingMinion fm = new FlyingMinion(
+                800 + (Math.random() *5) * 120,
+                100 + (Math.random() *5) * 40,
+                60, 60,
+                "assets/FlyingMinion.png"
+        );
+        // Random starting position just off the right side
+        fm.setTranslateX(GameStage.WIDTH + Math.random() * 1000); // random X
+        fm.setTranslateY(500 + Math.random() * 500);             // random Y
+
+        // Add to the minion list and scene
+        gameStage.getMinions().add(fm);
+        ((Pane) gameStage.getScene().getRoot()).getChildren().add(fm.getImageView());
+    }
+
 
     private void checkCollisions(List<GameCharacter> list) {
         for (GameCharacter g : list) {
