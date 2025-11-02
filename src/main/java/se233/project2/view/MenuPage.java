@@ -95,7 +95,7 @@ public class MenuPage extends StackPane {
         totalScoreLabel.setTextFill(Color.WHITE);
         getChildren().add(totalScoreLabel);
         // Layout
-        VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, stage2Btn, stage3Btn, totalScoreLabel);
+        VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, totalScoreLabel);
         vbox.setAlignment(Pos.CENTER);
 
         getChildren().add(vbox);
