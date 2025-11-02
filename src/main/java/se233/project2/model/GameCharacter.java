@@ -50,6 +50,7 @@ public class GameCharacter extends Pane {
     private int lastY;
     private int hp = 5;
     private int lives = 3;
+    private boolean isGameOver = false;
 
     //Bullet
     private List<Bullet> bullets = new ArrayList<>();
@@ -336,20 +337,36 @@ public class GameCharacter extends Pane {
     public void setFacingRight(boolean facingRight) {
         this.facingRight = facingRight;
     }
+//    public void takeDamage() {
+//
+//        hp--;
+//        if (hp <= 0) {
+//            lives--;
+//            if(lives <=0){
+//                stageManager.loadStage(4);
+//                return;
+//            }
+//            hp = 5;
+//            respawn();
+//        }
+//    }
+
     public void takeDamage() {
+        if (isGameOver) return; // ถ้าเกมจบแล้ว ไม่ทำอะไรต่อ
 
         hp--;
         if (hp <= 0) {
             lives--;
-            if(lives <=0){
+            if(lives <= 0){
                 stageManager.loadStage(4);
-                stageManager.loadStage(0);
+                isGameOver = true; // ตั้ง flag ว่าเกมจบแล้ว
                 return;
             }
             hp = 5;
             respawn();
         }
     }
+
     private StageManager stageManager;
 
     public void setStageManager(StageManager stageManager) {

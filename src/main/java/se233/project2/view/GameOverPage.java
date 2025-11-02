@@ -1,8 +1,11 @@
 package se233.project2.view;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -45,11 +48,39 @@ public class GameOverPage extends StackPane {
 
         // Title
         Text title = new Text("GAME OVER!");
-        title.setFont(Font.font(arcadeFont.getFamily(), 48));
+        title.setFont(Font.font(arcadeFont.getFamily(), 40));
         title.setFill(Color.ORANGE);
         Text text = new Text("You lost all 3 lives.");
-        text.setFont(Font.font(arcadeFont.getFamily(), 30));
+        text.setFont(Font.font(arcadeFont.getFamily(), 25));
         text.setFill(Color.ORANGE);
+
+        Button backButton = new Button("<- Back");
+        for (Button btn : new Button[]{backButton}) {
+            btn.setFont(Font.font(arcadeFont.getFamily(), 18));
+            btn.setStyle(
+                    "-fx-background-color: #031cc1;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-background-radius: 10;" +
+                            "-fx-cursor: hand;"
+            );
+            btn.setOnMouseEntered(e -> btn.setStyle(
+                    "-fx-background-color: #01982d;" +
+                            "-fx-text-fill: black;" +
+                            "-fx-background-radius: 10;"
+            ));
+            btn.setOnMouseExited(e -> btn.setStyle(
+                    "-fx-background-color: #031cc1;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-background-radius: 10;"
+            ));
+        }
+
+        backButton.setOnAction(e -> stageManager.loadStage(0));
+
+        VBox vbox = new VBox(20, title, text, backButton);
+        vbox.setAlignment(Pos.CENTER);
+
+        getChildren().add(vbox);
 
     }
 }

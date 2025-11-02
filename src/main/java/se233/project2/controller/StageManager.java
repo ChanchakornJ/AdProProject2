@@ -2,6 +2,8 @@ package se233.project2.controller;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import se233.project2.model.GameCharacter;
+import se233.project2.view.GameOverPage;
 import se233.project2.view.GameStage;
 import se233.project2.view.MenuPage;
 
