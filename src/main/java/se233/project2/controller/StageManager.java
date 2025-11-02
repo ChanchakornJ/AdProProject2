@@ -72,7 +72,7 @@ public class StageManager {
                 setupStage(stage2);
                 break;
 
-            case 3: // Stage 3 (same logic)
+            case 3:
                 if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage3 = GameStage.stage3();

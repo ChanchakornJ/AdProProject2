@@ -101,7 +101,7 @@ public class Boss extends Pane {
             );
 
 
-            r.setStroke(Color.RED);
+//            r.setStroke(Color.RED);
             r.setFill(Color.TRANSPARENT);
             if (!getChildren().contains(r)) getChildren().add(r);
         }
@@ -192,8 +192,7 @@ public class Boss extends Pane {
         ImageView explosion = new ImageView(spriteSheet);
 
 
-        // 🔹 ใส่ข้อมูลพิกัดและขนาดของแต่ละเฟรม (ต้องใส่ให้ตรงกับ sprite sheet จริง)
-        // ตัวอย่างการกำหนด rectangle ของแต่ละเฟรม
+
         Rectangle2D[] frames = {
                 new Rectangle2D(0, 0, 8, 32),
                 new Rectangle2D(9, 0, 8, 32),
