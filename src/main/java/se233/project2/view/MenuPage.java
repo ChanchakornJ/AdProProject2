@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import se233.project2.Launcher;
 import se233.project2.controller.StageManager;
+import se233.project2.model.ExceptionHandler;
 
 public class MenuPage extends StackPane {
     private Font arcadeFont;
@@ -42,7 +43,7 @@ public class MenuPage extends StackPane {
 
 
         } catch (Exception e) {
-            throw new RuntimeException("Background image unavailable.");
+            ExceptionHandler.handleException(e);
         }
 
 

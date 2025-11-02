@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import se233.project2.Launcher;
 import se233.project2.controller.StageManager;
+import se233.project2.model.ExceptionHandler;
 
 public class GameOverPage extends StackPane {
     private Font arcadeFont;
@@ -38,7 +39,7 @@ public class GameOverPage extends StackPane {
             getChildren().add(bg);
 
         } catch (Exception e) {
-            throw new IllegalStateException("Background image unavailable.", e);
+            ExceptionHandler.handleException(e);
         }
 
         StackPane overlay = new StackPane();

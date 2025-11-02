@@ -264,7 +264,7 @@ public class GameCharacter extends Pane {
         try {
             TimeUnit.MILLISECONDS.sleep(300);
         } catch (InterruptedException e) {
-            throw new RuntimeException("Sleep was interrupted", e);
+            ExceptionHandler.handleException(e);
         }
 
     }

@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import se233.project2.Launcher;
+import se233.project2.model.ExceptionHandler;
 
 public class GameWinPage extends StackPane {
     private Font arcadeFont;
@@ -33,7 +34,7 @@ public class GameWinPage extends StackPane {
             getChildren().add(bg);
 
         } catch (Exception e) {
-//            throw new Exception("Background image unavailable.", e);
+           ExceptionHandler.handleException(e);
         }
 
         StackPane overlay = new StackPane();
