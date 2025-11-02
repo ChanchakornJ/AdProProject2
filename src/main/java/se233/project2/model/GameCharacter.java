@@ -420,7 +420,7 @@ public class GameCharacter extends Pane {
             heartsUI.updateHearts(lives);
 
             if (lives <= 0) {
-                stageManager.loadStage(4);
+                stageManager.loadStage(5);
                 isGameOver = true;
                 return;
             }
