@@ -12,6 +12,7 @@ import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
 import se233.project2.controller.StageManager;
 import se233.project2.view.GameStage;
+import se233.project2.view.HeartsUI;
 import se233.project2.view.MenuPage;
 
 import java.util.ArrayList;
@@ -195,7 +196,7 @@ public class GameCharacter extends Pane {
         checkReachGameWall();
         trace();
     }
-    public boolean collided(GameCharacter c) throws CustomException {
+    public boolean collided(GameCharacter c) {
         if (this == c) return false;
 
         if (this.isMoveLeft && this.x > c.getX()) {
@@ -218,7 +219,7 @@ public class GameCharacter extends Pane {
     }
 
 
-    public void collapsed() throws CustomException {
+    public void collapsed() {
         this.imageView.setFitWidth((int) (this.getWidth() * 2));
         this.imageView.setFitHeight((int) (this.getHeight() * 2));
         this.y = 5;
@@ -227,8 +228,9 @@ public class GameCharacter extends Pane {
         try {
             TimeUnit.MILLISECONDS.sleep(300);
         } catch (InterruptedException e) {
-            throw new CustomException("Sleep was interrupted.", e);
+            throw new RuntimeException("Sleep was interrupted", e);
         }
+
     }
 
     public void respawn() {
@@ -352,20 +354,26 @@ public class GameCharacter extends Pane {
 //    }
 
     public void takeDamage() {
-        if (isGameOver) return; // ถ้าเกมจบแล้ว ไม่ทำอะไรต่อ
+        if (isGameOver) return;
 
         hp--;
         if (hp <= 0) {
             lives--;
-            if(lives <= 0){
+
+            HeartsUI heartsUI = (HeartsUI) stageManager.getHeartsUI();
+            heartsUI.updateHearts(lives);
+
+            if (lives <= 0) {
                 stageManager.loadStage(4);
-                isGameOver = true; // ตั้ง flag ว่าเกมจบแล้ว
+                isGameOver = true;
                 return;
             }
+
             hp = 5;
             respawn();
         }
     }
+
 
     private StageManager stageManager;
 
@@ -413,6 +421,27 @@ public class GameCharacter extends Pane {
         xVelocity = 0;
         setTranslateX(x);
     }
+    public void respawnToStart() {
+        this.x = this.startX;
+        this.y = this.startY;
+        this.xVelocity = 0;
+        this.yVelocity = 0;
+        this.isMoveLeft = false;
+        this.isMoveRight = false;
+        this.isJumping = false;
+        this.isFalling = true;
+        this.canJump = false;
+        setTranslateX(x);
+        setTranslateY(y);
+    }
+
+    public void resetLives() {
+        this.lives = 3;
+        this.hp = 5;
+        this.isGameOver = false;
+    }
+
+
 
 
 

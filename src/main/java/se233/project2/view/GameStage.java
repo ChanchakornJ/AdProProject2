@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
+import se233.project2.controller.StageManager;
 import se233.project2.model.*;
 
 import java.util.ArrayList;
@@ -100,16 +101,11 @@ public class GameStage extends Pane {
         stage.getChildren().addAll(stage.getMinions());
 
         // Player
-        GameCharacter player = new GameCharacter(
-                0, 30, 30,
-                "assets/Character.png",
-                6, 6, 1, 65, 64,
-                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
-        );
-        player.setPlatforms(stage.getPlatforms());
-        player.setBulletManager(stage.bulletManager);
-        stage.getGameCharacterList().add(player);
-        stage.getChildren().add(player);
+//
+//        player.setPlatforms(stage.getPlatforms());
+//        player.setBulletManager(stage.bulletManager);
+//        stage.getGameCharacterList().add(player);
+//        stage.getChildren().add(player);
 
 
         // Score positions
@@ -155,18 +151,18 @@ public class GameStage extends Pane {
         stage.boss.addHitPart(0.1, 0.1, 0.9, 0.8, 10);
         stage.boss.toFront();
 
-
-        // Player
-        GameCharacter player = new GameCharacter(
-                0, 30, 30,
-                "assets/Character.png",
-                6, 6, 1, 65, 64,
-                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
-        );
-        player.setPlatforms(stage.getPlatforms());
-        player.setBulletManager(stage.bulletManager);
-        stage.getGameCharacterList().add(player);
-        stage.getChildren().add(player);
+//
+//        // Player
+//        GameCharacter player = new GameCharacter(
+//                0, 30, 30,
+//                "assets/Character.png",
+//                6, 6, 1, 65, 64,
+//                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
+//        );
+//        player.setPlatforms(stage.getPlatforms());
+//        player.setBulletManager(stage.bulletManager);
+//        stage.getGameCharacterList().add(player);
+//        stage.getChildren().add(player);
 
         return stage;
     }
@@ -207,16 +203,11 @@ public class GameStage extends Pane {
         stage.getChildren().add(stage.boss);
 
         // Player
-        GameCharacter player = new GameCharacter(
-                0, 30, 30,
-                "assets/Character.png",
-                6, 6, 1, 65, 64,
-                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
-        );
-        player.setPlatforms(stage.getPlatforms());
-        player.setBulletManager(stage.bulletManager);
-        stage.getGameCharacterList().add(player);
-        stage.getChildren().add(player);
+
+
+// add hearts
+
+
 
         //Minion
         for (int i = 0; i < 10; i++) {
@@ -236,6 +227,15 @@ public class GameStage extends Pane {
 
     public int getStageNumber() { return stageNumber; }
     public void setStageNumber(int n) { stageNumber = n; }
+    public void addPlayer(GameCharacter player) {
+        player.setPlatforms(this.platforms);
+        player.setBulletManager(this.bulletManager);
+
+        gameCharacterList.clear();
+        gameCharacterList.add(player);
+
+        getChildren().add(player);
+    }
 
 
 }

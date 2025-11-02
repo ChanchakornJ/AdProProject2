@@ -7,12 +7,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import se233.project2.Launcher;
-import se233.project2.model.CustomException;
 
 public class GameWinPage extends StackPane {
     private Font arcadeFont;
 
-    public GameWinPage() throws CustomException {
+    public GameWinPage()  {
         setPrefSize(GameStage.WIDTH, GameStage.HEIGHT);
 
         arcadeFont = Font.loadFont(getClass().getResourceAsStream("/se233/project2/assets/PressStart2P-Regular.ttf"), 24);
@@ -24,7 +23,7 @@ public class GameWinPage extends StackPane {
         try {
             bgImage = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
             if (bgImage == null) {
-                throw new CustomException("Background image unavailable.");
+                throw new Exception("Background image unavailable.");
             }
 
             ImageView bg = new ImageView(bgImage);
@@ -34,7 +33,7 @@ public class GameWinPage extends StackPane {
             getChildren().add(bg);
 
         } catch (Exception e) {
-            throw new CustomException("Background image unavailable.", e);
+//            throw new Exception("Background image unavailable.", e);
         }
 
         StackPane overlay = new StackPane();
