@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
+import se233.project2.view.GameStage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,12 @@ public class Boss extends Pane {
     private long frameDelay = 120;
     private Rectangle2D hitBox;
     private List<HitPart> hitParts = new ArrayList<>();
+    private String pathwayImage;
 
 
 
-    public Boss(double x, double y, double w, double h, double speed, int hp, String imgName, BulletManager bulletManager){
+
+    public Boss(double x, double y, double w, double h, double speed, int hp, String imgName, BulletManager bulletManager, String pathwayImage){
         this.x = x;
         this.y = y;
         this.w = w;
@@ -49,6 +52,7 @@ public class Boss extends Pane {
         this.speed = speed;
         this.hp = hp;
         this.bulletManager = bulletManager;
+        this.pathwayImage = pathwayImage;
 
 
         this.bossImage = new Image(Launcher.class.getResourceAsStream(imgName));
@@ -62,9 +66,10 @@ public class Boss extends Pane {
 
     public void update() {
         animate();
-        x += speed;
-        if (x < 400 || x > 700) speed *= -1;
-        setTranslateX(x);
+        double nx = getTranslateX() + speed;
+        if (nx < 400 || nx > 700) speed *= -1;
+        setTranslateX(getTranslateX() + speed);
+
         updateHitBox();
         updateHitParts();
 
@@ -86,9 +91,15 @@ public class Boss extends Pane {
                     p.getBox().getHeight()
             );
 
+
             r.setStroke(Color.RED);
             r.setFill(Color.TRANSPARENT);
             if (!getChildren().contains(r)) getChildren().add(r);
+        }
+
+        if (alive && allHitPartsDestroyed()) {
+            die();
+            return;
         }
 
 
@@ -111,15 +122,14 @@ public class Boss extends Pane {
         return hitBox;
     }
     private void updateHitBox() {
-        if (hitBox != null) {
-            hitBox = new Rectangle2D(
-                    getTranslateX() + w * 0.25,
-                    getTranslateY() + h * 0.3,
-                    w * 0.5,
-                    h * 0.4
-            );
-        }
+        hitBox = new Rectangle2D(
+                getTranslateX() + sprite.getFitWidth() * 0.25,
+                getTranslateY() + sprite.getFitHeight() * 0.3,
+                sprite.getFitWidth() * 0.5,
+                sprite.getFitHeight() * 0.4
+        );
     }
+
     public static class HitPart {
         private Rectangle2D box;
         private int hp = 3;
@@ -137,13 +147,13 @@ public class Boss extends Pane {
         }
     }
 
-    public void addHitPart(double offsetX, double offsetY, double widthPercent, double heightPercent) {
+    public void addHitPart(double offsetX, double offsetY, double widthPercent, double heightPercent, int hp) {
         HitPart part = new HitPart();
         part.offsetX = offsetX;
         part.offsetY = offsetY;
         part.widthPercent = widthPercent;
         part.heightPercent = heightPercent;
-        part.hp = 3;
+        part.hp = hp;
         updateHitPart(part);
         hitParts.add(part);
     }
@@ -192,15 +202,12 @@ public class Boss extends Pane {
 
 
 
-    void draw(GraphicsContext gc) {
-        gc.setFill(Color.RED);
-        gc.fillRect(x, y - h, w, h);
-        gc.setFill(Color.WHITE);
-        gc.fillText("Boss HP: " + hp, x, y - h - 10);
-    }
+
     public void takeDamage() {
-        hp--;
-        if (hp <= 0) die();
+        if (allHitPartsDestroyed()) {
+            hp--;
+            if (hp <= 0) die();
+        }
     }
 
     public void die() {
@@ -210,14 +217,25 @@ public class Boss extends Pane {
             parent.getChildren().remove(this);
 
             ImageView pathway = new ImageView(new Image(
-                    Launcher.class.getResourceAsStream("assets/Stage1Pathway.png")
+                    Launcher.class.getResourceAsStream(pathwayImage)
             ));
-            pathway.setX(350);
-            pathway.setY(250);
+            pathway.setX(455);
+            pathway.setY(235);
+            pathway.setFitHeight(160);
+            pathway.setFitWidth(340);
+
             this.setVisible(false);
-            parent.getChildren().add(pathway);
+
+            GameStage stage = (GameStage) parent;
+
+            GameCharacter player = stage.getGameCharacterList().get(0);
+
+            int playerIndex = parent.getChildren().indexOf(player);
+
+            parent.getChildren().add(playerIndex, pathway);
         }
     }
+
 
 
 
@@ -238,12 +256,21 @@ public class Boss extends Pane {
         return alive;
     }
 
-    public double getW() {
-        return w;
+    public double getBossWidth() {
+        return sprite.getFitWidth();
     }
+
     public List<HitPart> getHitParts() {
         return hitParts;
     }
+
+    public Rectangle2D getSpriteBounds() {
+        var b = sprite.localToScene(sprite.getBoundsInLocal());
+        return new Rectangle2D(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+    }
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 package se233.project2.model;
 
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -96,18 +97,22 @@ public class GameCharacter extends Pane {
         xVelocity = 0;
     }
 
-
     public void moveX() {
+        if (isMoveLeft) {
+            xVelocity = Math.min(xVelocity + xAcceleration, xMaxVelocity);
+            x -= xVelocity;
+        }
+        if (isMoveRight) {
+            xVelocity = Math.min(xVelocity + xAcceleration, xMaxVelocity);
+            x += xVelocity;
+        }
         setTranslateX(x);
-        if(isMoveLeft) {
-            xVelocity = xVelocity>=xMaxVelocity? xMaxVelocity : xVelocity+xAcceleration;
-            x = x - xVelocity;
-        }
-        if(isMoveRight) {
-            xVelocity = xVelocity>=xMaxVelocity? xMaxVelocity : xVelocity+xAcceleration;
-            x = x + xVelocity;
-        }
     }
+
+
+
+
+
     public void moveY() {
         setTranslateY(y);
         if(isFalling) {
@@ -181,6 +186,7 @@ public class GameCharacter extends Pane {
 
     public void repaint() {
         moveX();
+        checkBossCollision();
         moveY();
         checkPlatforms(platforms);
         checkReachHighest();
@@ -350,6 +356,49 @@ public class GameCharacter extends Pane {
     public StageManager getStageManager() {
         return stageManager;
     }
+    public Rectangle2D getSpriteBounds() {
+        var b = imageView.localToScene(imageView.getBoundsInLocal());
+        double padding = 50;
+        return new Rectangle2D(
+                b.getMinX() + padding,
+                b.getMinY(),
+                b.getWidth() - padding * 2,
+                b.getHeight()
+        );
+    }
+
+
+
+    public void stopHorizontal() {
+        xVelocity = 0;
+    }
+    private void checkBossCollision() {
+        if (!(getParent() instanceof GameStage stage)) return;
+        Boss boss = stage.getBoss();
+        if (boss == null || !boss.isAlive()) return;
+
+        Rectangle2D bossBox = boss.getSpriteBounds();
+        Rectangle2D playerBox = getSpriteBounds();
+
+        if (!playerBox.intersects(bossBox)) return;
+
+        double overlapLeft = playerBox.getMaxX() - bossBox.getMinX();
+        double overlapRight = bossBox.getMaxX() - playerBox.getMinX();
+
+        if (overlapLeft < overlapRight) {
+            x -= overlapLeft;
+        } else {
+            x += overlapRight;
+        }
+
+        xVelocity = 0;
+        setTranslateX(x);
+    }
+
+
+
+
+
 
 
 }

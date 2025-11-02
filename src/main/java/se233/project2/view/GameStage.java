@@ -54,7 +54,7 @@ public class GameStage extends Pane {
 
 
         // Platforms
-        stage.getPlatforms().add(new Platform(0, 320, 500, 100)); // ground
+        stage.getPlatforms().add(new Platform(0, 320, 700, 100)); // ground
         stage.getPlatforms().add(new Platform(0, 150, 150, 40));
         stage.getPlatforms().add(new Platform(0, 240, 150, 40));
         stage.getPlatforms().add(new Platform(180, 220, 40, 100));
@@ -79,14 +79,14 @@ public class GameStage extends Pane {
         stage.bulletManager = new BulletManager(stage);
 
         // Boss
-        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager);
+        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager, "assets/Stage1Pathway.png");
         stage.boss.setAnimationConfig(1, 1, 120);
         stage.getChildren().add(stage.boss);
         boss.addCannonPercent(0.05, 0.4);
         boss.addCannonPercent(0.28, 0.4);
-        boss.addHitPart(0.05, 0.4, 0.05, 0.05);
-        boss.addHitPart(0.28, 0.4, 0.05, 0.05);
-        boss.addHitPart(0.1, 0.65, 0.2, 0.2);
+//        boss.addHitPart(0.05, 0.4, 0.05, 0.05, 1);
+//        boss.addHitPart(0.28, 0.4, 0.05, 0.05, 1);
+        boss.addHitPart(0.04, 0.5, 0.3, 0.3, 10);
 
 
 
@@ -141,7 +141,7 @@ public class GameStage extends Pane {
         stage.bulletManager = new BulletManager(stage);
 
         // Boss
-        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager);
+        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager, null);
         stage.boss.setAnimationConfig(3, 1, 150);  // 6 frames, faster animation
         stage.getChildren().add(stage.boss);
 
@@ -174,6 +174,7 @@ public class GameStage extends Pane {
             stage.getChildren().add(rect);
         }
 
+
         // Background
         stage.gameStageImg = new Image(Launcher.class.getResourceAsStream("assets/Stage3.png"));
         ImageView bg = new ImageView(stage.gameStageImg);
@@ -181,11 +182,12 @@ public class GameStage extends Pane {
         bg.setFitHeight(HEIGHT);
         stage.getChildren().add(bg);
 
+
         // Bullet manager
         stage.bulletManager = new BulletManager(stage);
 
         // Boss
-        stage.boss = new Boss(450, 150, 150, 150, 0.0, 10, "assets/Boss3.png", stage.bulletManager);
+        stage.boss = new Boss(450, 150, 150, 150, 0.0, 10, "assets/Boss3.png", stage.bulletManager,null);
         stage.boss.setAnimationConfig(6, 1, 70);  // 6 frames, faster animation
         stage.getChildren().add(stage.boss);
 
