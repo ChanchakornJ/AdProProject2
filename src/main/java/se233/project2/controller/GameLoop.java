@@ -132,18 +132,15 @@ public class GameLoop {
     }
 
     private void spawnFlyingMinion() {
-        // Create a new FlyingMinion with dummy initial values (constructor still needs them)
         FlyingMinion fm = new FlyingMinion(
                 800 + (Math.random() *5) * 120,
                 100 + (Math.random() *5) * 40,
                 60, 60,
                 "assets/FlyingMinion.png"
         );
-        // Random starting position just off the right side
-        fm.setTranslateX(GameStage.WIDTH + Math.random() * 1000); // random X
-        fm.setTranslateY(500 + Math.random() * 500);             // random Y
+        fm.setTranslateX(GameStage.WIDTH + Math.random() * 1000);
+        fm.setTranslateY(500 + Math.random() * 500);
 
-        // Add to the minion list and scene
         gameStage.getMinions().add(fm);
 
         gameStage.getChildren().add(fm);

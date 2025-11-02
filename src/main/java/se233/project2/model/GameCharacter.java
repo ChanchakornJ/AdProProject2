@@ -134,16 +134,15 @@ public class GameCharacter extends Pane {
     }
 
     public void checkReachGameWall() {
-        // left boundary
-        if (x <= 0) {
+       if (x <= 0) {
             x = 0;
         }
 
-        // right boundary
-        if (x + getCharacterWidth() >= GameStage.WIDTH) {
-            x = GameStage.WIDTH - getCharacterWidth();
+        if (x + getCharacterWidth() >= GameStage.WIDTH + 50) {
+            x = GameStage.WIDTH + 50;
         }
     }
+
 
     public void jump() {
         if (canJump) {
