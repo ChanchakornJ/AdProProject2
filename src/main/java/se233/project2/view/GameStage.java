@@ -22,8 +22,9 @@ public class GameStage extends Pane {
     private Keys keys;
     private List<Platform> platforms;
     private BulletManager bulletManager;
-    private static Boss boss;
-    private static Boss boss2;
+    private Boss boss;
+    private int stageNumber;
+
 
     private List<Minion> minions;
 
@@ -53,6 +54,8 @@ public class GameStage extends Pane {
 
     public static GameStage stage1() {
         GameStage stage = new GameStage();
+        stage.setStageNumber(1);
+
 
 
         // Platforms
@@ -82,13 +85,13 @@ public class GameStage extends Pane {
 
         // Boss
         stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss1.png", stage.bulletManager, "assets/Stage1Pathway.png");
-        stage.boss.setAnimationConfig(1, 1, 120);
+        stage.boss.setAnimationConfig(1, 1, 0, 0, 10); // 1 frame only
         stage.getChildren().add(stage.boss);
-        boss.addCannonPercent(0.05, 0.4);
-        boss.addCannonPercent(0.28, 0.4);
+        stage.boss.addCannonPercent(0.05, 0.4);
+        stage.boss.addCannonPercent(0.28, 0.4);
 //        boss.addHitPart(0.05, 0.4, 0.05, 0.05, 1);
 //        boss.addHitPart(0.28, 0.4, 0.05, 0.05, 1);
-        boss.addHitPart(0.04, 0.5, 0.3, 0.3, 10);
+        stage.boss.addHitPart(0.04, 0.5, 0.3, 0.3, 10);
 
 
 
@@ -117,9 +120,10 @@ public class GameStage extends Pane {
     }
 
     public static GameStage stage2() {
-        boss = null;
 
         GameStage stage = new GameStage();
+        stage.setStageNumber(2);
+
         // Platforms for stage2 (can be different)
         stage.getPlatforms().add(new Platform(0, 300, 500, 100)); // ground
         // add more if needed
@@ -145,9 +149,10 @@ public class GameStage extends Pane {
         stage.bulletManager = new BulletManager(stage);
 
         // Boss
-        stage.boss = new Boss(450, 60, 350, 350, 0.0, 10, "assets/Boss2.png", stage.bulletManager, null);
-        stage.boss.setAnimationConfig(2, 1, 120);  // 6 frames, faster animation
+        stage.boss = new Boss(450, 40, 300, 300, 0.0, 20, "assets/Boss2.png", stage.bulletManager, null);
+        stage.boss.setAnimationConfig(2, 1, 0, 1, 60);
         stage.getChildren().add(stage.boss);
+        stage.boss.addHitPart(0.1, 0.1, 0.9, 0.8, 10);
         stage.boss.toFront();
 
 
@@ -168,6 +173,8 @@ public class GameStage extends Pane {
 
     public static GameStage stage3() {
         GameStage stage = new GameStage();
+        stage.setStageNumber(3);
+
         // Platforms for stage2 (can be different)
         stage.getPlatforms().add(new Platform(0, 275, 500, 100)); // ground
         // add more if needed
@@ -194,7 +201,9 @@ public class GameStage extends Pane {
 
         // Boss
         stage.boss = new Boss(450, 150, 150, 150, 0.0, 10, "assets/Boss3.png", stage.bulletManager,null);
-        stage.boss.setAnimationConfig(6, 1, 70);  // 6 frames, faster animation
+        stage.boss.setAnimationConfig(6, 1, 0, 5, 20);
+        stage.boss.addHitPart(0.0, 0.0, 0.8, 1, 10);
+
         stage.getChildren().add(stage.boss);
 
         // Player
@@ -224,4 +233,9 @@ public class GameStage extends Pane {
 
         return stage;
     }
+
+    public int getStageNumber() { return stageNumber; }
+    public void setStageNumber(int n) { stageNumber = n; }
+
+
 }

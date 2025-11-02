@@ -25,7 +25,7 @@ public class Boss extends Pane {
     int hp = 20;
     boolean alive = true;
     private Image bossImage;
-    private ImageView sprite;
+    private BossSprite sprite;
     private long lastShotTime = 0;
     private BulletManager bulletManager;
     private List<double[]> cannons = new ArrayList<>();
@@ -39,12 +39,18 @@ public class Boss extends Pane {
     private long frameDelay = 120;
     private Rectangle2D hitBox;
     private List<HitPart> hitParts = new ArrayList<>();
-    private String pathwayImage;
+    private String pathwayImage;private int sheetCols = 1;
+    private int sheetRows = 1;
+    private int startIndex = 0;
+    private int endIndex = 0;
 
 
 
 
-    public Boss(double x, double y, double w, double h, double speed, int hp, String imgName, BulletManager bulletManager, String pathwayImage){
+
+    public Boss(double x, double y, double w, double h, double speed, int hp,
+                String imgName, BulletManager bulletManager, String pathwayImage) {
+
         this.x = x;
         this.y = y;
         this.w = w;
@@ -54,18 +60,20 @@ public class Boss extends Pane {
         this.bulletManager = bulletManager;
         this.pathwayImage = pathwayImage;
 
-
-        this.bossImage = new Image(Launcher.class.getResourceAsStream(imgName));
-        this.sprite = new ImageView(bossImage);
+        Image img = new Image(Launcher.class.getResourceAsStream(imgName));
+        sprite = new BossSprite(img);
         sprite.setFitWidth(w);
         sprite.setFitHeight(h);
         getChildren().add(sprite);
+
         setTranslateX(x);
         setTranslateY(y);
     }
 
+
+
     public void update() {
-        animate();
+        sprite.tick();
         double nx = getTranslateX() + speed;
         if (nx < 400 || nx > 700) speed *= -1;
         setTranslateX(getTranslateX() + speed);
@@ -239,14 +247,13 @@ public class Boss extends Pane {
 
 
 
-    public void setAnimationConfig(int cols, int rows, long delay) {
-        this.totalCols = cols;
-        this.totalRows = rows;
-        this.frameDelay = delay;
-        frameWidth = bossImage.getWidth() / totalCols;
-        frameHeight = bossImage.getHeight() / totalRows;
-        sprite.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
+    public void setAnimationConfig(int cols, int rows, int startFrame, int endFrame, int delay) {
+        if (sprite != null) {
+            sprite.configure(cols, rows, startFrame, endFrame, delay);
+        }
     }
+
+
     public void addCannonPercent(double percentX, double percentY) {
         cannons.add(new double[]{percentX * w, percentY * h});
     }
