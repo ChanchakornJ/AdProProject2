@@ -17,6 +17,7 @@ public class StageManager {
     }
 
     public void loadStage(int num) {
+        currentStage = num;
         switch (num) {
             case 0: // Menu page
                 MenuPage menuPage = new MenuPage(this);

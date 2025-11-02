@@ -93,15 +93,15 @@ public class GameLoop {
             if (m.isAlive()) m.update();
         }
 
-// Continuous spawn: generate new FlyingMinions
-        long flyingCount = gameStage.getMinions()
-                .stream()
-                .filter(m -> m instanceof FlyingMinion && m.isAlive())
-                .count();
+        if (gameStage.getStageNumber() == 3) {
+            long flyingCount = gameStage.getMinions()
+                    .stream()
+                    .filter(m -> m instanceof FlyingMinion && m.isAlive())
+                    .count();
 
-// Example: max 8 on screen at once, 2% chance per frame to spawn
-        if (flyingCount < 8 && Math.random() < 0.02) {
-            spawnFlyingMinion();
+            if (flyingCount < 8 && Math.random() < 0.02) {
+                spawnFlyingMinion();
+            }
         }
 
 
@@ -110,6 +110,7 @@ public class GameLoop {
         checkBulletPlayerCollision(gameStage);
         checkPlayerBossCollision(gameStage);
         checkStageTransition(gameStage);
+        checkMinionPlayerCollision(gameStage);
 
 
     }
@@ -128,6 +129,7 @@ public class GameLoop {
 
         // Add to the minion list and scene
         gameStage.getMinions().add(fm);
+
         gameStage.getChildren().add(fm);
     }
 
@@ -281,7 +283,7 @@ public class GameLoop {
                             gameCharacter.getCharacterHeight()
                     );
                     if (minionBox.intersects(playerBox)) {
-                        gameCharacter.respawn(); // หรือ player.takeDamage();
+                        gameCharacter.takeDamage();
                         return;
                     }
                 }
