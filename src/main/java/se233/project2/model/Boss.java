@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
+import se233.project2.view.GameStage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,12 +202,7 @@ public class Boss extends Pane {
 
 
 
-//    void draw(GraphicsContext gc) {
-//        gc.setFill(Color.RED);
-//        gc.fillRect(x, y - h, w, h);
-//        gc.setFill(Color.WHITE);
-//        gc.fillText("Boss HP: " + hp, x, y - h - 10);
-//    }
+
     public void takeDamage() {
         if (allHitPartsDestroyed()) {
             hp--;
@@ -223,13 +219,23 @@ public class Boss extends Pane {
             ImageView pathway = new ImageView(new Image(
                     Launcher.class.getResourceAsStream(pathwayImage)
             ));
-            pathway.setX(350);
-            pathway.setY(250);
+            pathway.setX(455);
+            pathway.setY(235);
+            pathway.setFitHeight(160);
+            pathway.setFitWidth(340);
+
             this.setVisible(false);
-            parent.getChildren().add(pathway);
-            pathway.toFront();
+
+            GameStage stage = (GameStage) parent;
+
+            GameCharacter player = stage.getGameCharacterList().get(0);
+
+            int playerIndex = parent.getChildren().indexOf(player);
+
+            parent.getChildren().add(playerIndex, pathway);
         }
     }
+
 
 
 

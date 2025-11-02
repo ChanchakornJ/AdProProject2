@@ -49,12 +49,13 @@ public class GameStage extends Pane {
     public BulletManager getBulletManager() { return bulletManager; }
     public List<Minion> getMinions() { return minions; }
 
+
     public static GameStage stage1() {
         GameStage stage = new GameStage();
 
 
         // Platforms
-        stage.getPlatforms().add(new Platform(0, 320, 500, 100)); // ground
+        stage.getPlatforms().add(new Platform(0, 320, 700, 100)); // ground
         stage.getPlatforms().add(new Platform(0, 150, 150, 40));
         stage.getPlatforms().add(new Platform(0, 240, 150, 40));
         stage.getPlatforms().add(new Platform(180, 220, 40, 100));
@@ -84,9 +85,9 @@ public class GameStage extends Pane {
         stage.getChildren().add(stage.boss);
         boss.addCannonPercent(0.05, 0.4);
         boss.addCannonPercent(0.28, 0.4);
-//        boss.addHitPart(0.05, 0.4, 0.05, 0.05);
-//        boss.addHitPart(0.28, 0.4, 0.05, 0.05);
-        boss.addHitPart(0.08, 0.65, 0.2, 0.2, 10);
+//        boss.addHitPart(0.05, 0.4, 0.05, 0.05, 1);
+//        boss.addHitPart(0.28, 0.4, 0.05, 0.05, 1);
+        boss.addHitPart(0.04, 0.5, 0.3, 0.3, 10);
 
 
 

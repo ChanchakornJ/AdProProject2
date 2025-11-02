@@ -395,14 +395,6 @@ public class GameCharacter extends Pane {
         setTranslateX(x);
     }
 
-    private boolean willCollideWithBoss(int nextX) {
-        if (!(getParent() instanceof GameStage stage)) return false;
-        Boss boss = stage.getBoss();
-        if (boss == null || !boss.isAlive()) return false;
-
-        Rectangle2D nextBounds = new Rectangle2D(nextX, y, characterWidth, characterHeight);
-        return nextBounds.intersects(boss.getSpriteBounds());
-    }
 
 
 
