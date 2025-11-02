@@ -130,9 +130,16 @@ public class GameCharacter extends Pane {
             y = y - yVelocity;
         }
     }
+
     public void checkReachGameWall() {
+        // left boundary
         if (x <= 0) {
             x = 0;
+        }
+
+        // right boundary
+        if (x + getCharacterWidth() >= GameStage.WIDTH) {
+            x = GameStage.WIDTH - getCharacterWidth();
         }
     }
 
@@ -506,6 +513,10 @@ public class GameCharacter extends Pane {
 
     public void resetSessionScore() {
         sessionScore = 0;
+    }
+
+    public long getShootCooldown() {
+        return SHOOT_COOLDOWN;
     }
 
     public enum AnimState {
