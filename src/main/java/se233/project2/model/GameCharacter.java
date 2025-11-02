@@ -36,6 +36,7 @@ public class GameCharacter extends Pane {
     private KeyCode leftKey;
     private KeyCode rightKey;
     private KeyCode upKey;
+    private KeyCode downKey;
     private KeyCode shootKey;
     public int xVelocity = 0;
     int yVelocity = 0;
@@ -46,8 +47,11 @@ public class GameCharacter extends Pane {
     public boolean isMoveLeft = false;
     public boolean isMoveRight = false;
     boolean isFalling = true;
+    public boolean isShooting = false;
     boolean canJump = false;
+    boolean canProne = false;
     public boolean isJumping = false;
+    public boolean isProne = false;
     private int lastX;
     private int lastY;
     private int hp = 5;
@@ -64,7 +68,7 @@ public class GameCharacter extends Pane {
 
 
 
-    public GameCharacter(int id, int x, int y, String imgName, int count, int column, int row, int width, int height, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode shootKey) {
+    public GameCharacter(int id, int x, int y, String imgName, int count, int column, int row, int width, int height, KeyCode leftKey, KeyCode rightKey, KeyCode upKey,KeyCode downKey, KeyCode shootKey) {
         this.x = x;
         this.y = y;
         this.startX = x;
@@ -74,12 +78,13 @@ public class GameCharacter extends Pane {
         this.characterWidth = width;
         this.characterHeight = height;
         this.characterImg = new Image(Launcher.class.getResourceAsStream(imgName));
-        this.imageView = new AnimatedSprite(characterImg, count, column, row, 0, 0, width, height);
+        this.imageView = new AnimatedSprite(characterImg, column, width, height);
         this.imageView.setFitWidth((int) (width * 2));
         this.imageView.setFitHeight((int) (height * 2));
         this.leftKey = leftKey;
         this.rightKey = rightKey;
         this.upKey = upKey;
+        this.downKey = downKey;
         this.shootKey = shootKey;
         this.getChildren().addAll(this.imageView);
         setScaleX(id % 2 * 2 - 1);
@@ -142,6 +147,14 @@ public class GameCharacter extends Pane {
 
         }
     }
+    public void prone(){
+        if (canProne){
+            xVelocity = 0;
+            canJump = false;
+            isProne = true;
+
+        }
+    }
     public void checkReachHighest () {
         if(isJumping && yVelocity <= 0) {
             isJumping = false;
@@ -187,6 +200,8 @@ public class GameCharacter extends Pane {
 
 
     public void repaint() {
+        imageView.tick();
+
         moveX();
         checkBossCollision();
         moveY();
@@ -194,8 +209,29 @@ public class GameCharacter extends Pane {
         checkReachHighest();
         checkReachFloor();
         checkReachGameWall();
+
+        if (isJumping || isFalling) {
+            playJump();
+        }else if(isProne){
+            playProne();
+        } else if (isMoveLeft || isMoveRight) {
+            playRun();
+
+        } else if(isShooting){
+            playShoot();
+        } else {
+            playIdle();
+        }
+        if (isShooting && currentState == AnimState.SHOOT) {
+            if (imageView.isLastFrame()) {
+                isShooting = false;
+            }
+        }
+
+
         trace();
     }
+
     public boolean collided(GameCharacter c) {
         if (this == c) return false;
 
@@ -266,6 +302,10 @@ public class GameCharacter extends Pane {
         return imageView;
     }
 
+    public KeyCode getDownKey() {
+        return downKey;
+    }
+
     public int getX() {
         return x;
     }
@@ -330,12 +370,15 @@ public class GameCharacter extends Pane {
         }
         lastShotTime = now;
 
+        isShooting = true;  // <--- add this
+
         double startX = getTranslateX() + (facingRight ? characterWidth : 0);
         double startY = getTranslateY() + characterHeight / 2.0;
         bulletManager.shoot(startX, startY, facingRight, true);
         actionLogger.warn("Character shoot at x={}, y={}", x, y);
 
     }
+
 
 
     public void setFacingRight(boolean facingRight) {
@@ -464,6 +507,45 @@ public class GameCharacter extends Pane {
     public void resetSessionScore() {
         sessionScore = 0;
     }
+
+    public enum AnimState {
+        IDLE, PRONE, RUN, JUMP, SHOOT
+    }
+
+    private AnimState currentState = AnimState.RUN;
+    public void playRun() {
+        if (currentState != AnimState.RUN) {
+            imageView.setAnimation(0, 0, 4);
+            currentState = AnimState.RUN;
+        }
+    }
+
+    public void playJump() {
+        if (currentState != AnimState.JUMP) {
+            imageView.setAnimation(12, 1, 4);
+            currentState = AnimState.JUMP;
+        }
+    }
+
+    public void playProne() {
+        if (currentState != AnimState.PRONE) {
+            imageView.setAnimation(14, 0, 2);
+            currentState = AnimState.PRONE;
+        }
+    }
+
+    public void playShoot() {
+        if (currentState != AnimState.SHOOT) {
+            imageView.setAnimation(6, 0, 2);
+            currentState = AnimState.SHOOT;
+        }
+    }
+    public void playIdle() {
+        if (currentState != AnimState.IDLE)
+        { imageView.setAnimation(0, 0, 1);
+            currentState = AnimState.IDLE; } }
+
+
 
 
 

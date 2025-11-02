@@ -8,32 +8,51 @@ import javafx.scene.image.ImageView;
 public class AnimatedSprite extends ImageView {
     private int frameDelay = 6;
     private int frameCounter = 0;
-    int count, columns, rows, offsetX, offsetY, width, height, curIndex, curColumnIndex = 0, curRowIndex = 0;
-    public AnimatedSprite(Image image, int count, int columns, int rows, int offsetX, int offsetY, int width, int height) {
+
+    private int totalColumns, frameWidth, frameHeight;
+    private int startColumn = 0, startRow = 0;
+    private int frameCount = 1;   // how many frames in current animation
+    private int currentFrame = 0;
+
+    public AnimatedSprite(Image image, int totalColumns, int frameWidth, int frameHeight) {
         this.setImage(image);
-        this.count = count;
-        this.columns = columns;
-        this.rows = rows;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.width = width;
-        this.height = height;
-        this.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
+        this.totalColumns = totalColumns;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+
+        setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
+
+    /** Call this when switching animation */
+    public void setAnimation(int startColumn, int startRow, int frameCount) {
+        this.startColumn = startColumn;
+        this.startRow = startRow;
+        this.frameCount = frameCount;
+        this.currentFrame = 0;   // reset frame
+        updateViewport();
+    }
+
     public void tick() {
         frameCounter++;
         if (frameCounter < frameDelay) return;
         frameCounter = 0;
 
-        curColumnIndex = curIndex % columns;
-        curRowIndex = curIndex / columns;
-        curIndex = (curIndex + 1) % (columns * rows);
-        curIndex = curIndex < count ? curIndex : 0;
-        interpolate();
+        currentFrame = (currentFrame + 1) % frameCount;
+        updateViewport();
     }
-    protected void interpolate() {
-        final int x = curColumnIndex * width + offsetX;
-        final int y = curRowIndex * height + offsetY;
-        this.setViewport(new Rectangle2D(x, y, width, height));
+
+    private void updateViewport() {
+        int col = (startColumn + currentFrame) % totalColumns;
+        int row = startRow + (startColumn + currentFrame) / totalColumns;
+
+        int x = col * frameWidth;
+        int y = row * frameHeight;
+
+        setViewport(new Rectangle2D(x, y, frameWidth, frameHeight));
     }
+    public boolean isLastFrame() {
+        return currentFrame == frameCount - 1;
+    }
+
+
 }

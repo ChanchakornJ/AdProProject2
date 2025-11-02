@@ -275,7 +275,7 @@ public class Boss extends Pane {
                 GameStage stage = (GameStage) getParent();
                 GameCharacter player = stage.getGameCharacterList().get(0);
                 player.addScore(100);
-                player.addSessionScore(100);
+
 
                 die();}
 
