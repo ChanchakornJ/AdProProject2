@@ -440,6 +440,30 @@ public class GameCharacter extends Pane {
         this.hp = 5;
         this.isGameOver = false;
     }
+    public int getLives(){
+        return this.lives;
+    }
+    private int sessionScore = 0;
+    private int totalScore = 0;
+
+    public void addScore(int amount) {
+        sessionScore += amount;
+        totalScore += amount;
+
+    }
+    public void addSessionScore(int amount) {
+        sessionScore += amount;
+    }
+
+
+    public int getSessionScore() { return sessionScore; }
+    public int getTotalScore() { return totalScore; }
+
+    public void resetSessionScore() {
+        sessionScore = 0;
+    }
+
+
 
 
 

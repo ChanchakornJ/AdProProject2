@@ -127,6 +127,9 @@ public class FlyingMinion extends Minion {
         alive = false;
         Pane parent = (Pane) getParent();
         if (parent != null) {
+            GameStage stage = (GameStage) getParent();
+            GameCharacter player = stage.getGameCharacterList().get(0);
+            player.addScore(10);
             parent.getChildren().remove(this);
         }
     }

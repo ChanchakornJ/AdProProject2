@@ -4,10 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import se233.project2.model.GameCharacter;
-import se233.project2.view.GameOverPage;
-import se233.project2.view.GameStage;
-import se233.project2.view.HeartsUI;
-import se233.project2.view.MenuPage;
+import se233.project2.view.*;
 
 public class StageManager {
     private int currentStage = 1;
@@ -16,14 +13,14 @@ public class StageManager {
     private GameCharacter player;
     private HeartsUI heartsUI;
     private GameLoop gameLoop;
-
+    private SessionScoreUI sessionScoreUI;
 
     public StageManager(Stage window) {
         this.window = window;
-
     }
 
     public void loadStage(int num) {
+
         if (player == null) {
             player = new GameCharacter(
                     0, 30, 30, "assets/Character.png",
@@ -34,104 +31,86 @@ public class StageManager {
         if (heartsUI == null) {
             heartsUI = new HeartsUI(3);
         }
+        if (sessionScoreUI == null) {
+            sessionScoreUI = new SessionScoreUI(); // created once, reused always
+        }
+
         currentStage = num;
 
         switch (num) {
-            case 0: // Menu page
+
+            case 0: // Menu
                 MenuPage menuPage = new MenuPage(this);
                 scene = new Scene(menuPage, GameStage.WIDTH, GameStage.HEIGHT);
                 window.setScene(scene);
-
                 break;
 
-            case 1:
-                if (gameLoop != null) gameLoop.stop(); // ✅ stop old loop
+            case 1: // Stage 1 (fresh run)
+                if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage1 = GameStage.stage1();
                 player.setStageManager(this);
                 player.resetLives();
+                player.resetSessionScore(); // ✅ reset only when restarting at stage 1
                 heartsUI.updateHearts(3);
                 player.respawnToStart();
 
-                scene = new Scene(stage1, GameStage.WIDTH, GameStage.HEIGHT);
-                window.setScene(scene);
+                sessionScoreUI.update(0);
 
-                stage1.getKeys().clear();
-                scene.setOnKeyPressed(null);
-                scene.setOnKeyReleased(null);
-                scene.setOnKeyPressed(e -> stage1.getKeys().add(e.getCode()));
-                scene.setOnKeyReleased(e -> stage1.getKeys().remove(e.getCode()));
-
-                stage1.addPlayer(player);
-                stage1.getChildren().add(heartsUI);
-
-                gameLoop = new GameLoop(stage1); // ✅ store the loop
-                gameLoop.start();
+                setupStage(stage1);
                 break;
 
-
-
-            case 2:
-                if (gameLoop != null) gameLoop.stop(); // ✅ stop old loop
+            case 2: // Stage 2 (carry lives + score)
+                if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage2 = GameStage.stage2();
                 player.setStageManager(this);
-                player.resetLives();
-                heartsUI.updateHearts(3);
+                heartsUI.updateHearts(player.getLives()); // ✅ keep lives
+                sessionScoreUI.update(player.getSessionScore()); // ✅ carry score
                 player.respawnToStart();
 
-                scene = new Scene(stage2, GameStage.WIDTH, GameStage.HEIGHT);
-                window.setScene(scene);
-
-                stage2.getKeys().clear();
-                scene.setOnKeyPressed(e -> stage2.getKeys().add(e.getCode()));
-                scene.setOnKeyReleased(e -> stage2.getKeys().remove(e.getCode()));
-
-                stage2.addPlayer(player);
-                stage2.getChildren().add(heartsUI);
-
-                gameLoop = new GameLoop(stage2);
-                gameLoop.start();
+                setupStage(stage2);
                 break;
 
-            case 3:
+            case 3: // Stage 3 (same logic)
                 if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage3 = GameStage.stage3();
                 player.setStageManager(this);
+                heartsUI.updateHearts(player.getLives());
+                sessionScoreUI.update(player.getSessionScore());
                 player.respawnToStart();
 
-                scene = new Scene(stage3, GameStage.WIDTH, GameStage.HEIGHT);
-                window.setScene(scene);
-
-                stage3.getKeys().clear();
-                scene.setOnKeyPressed(e -> stage3.getKeys().add(e.getCode()));
-                scene.setOnKeyReleased(e -> stage3.getKeys().remove(e.getCode()));
-
-                stage3.addPlayer(player);
-                stage3.getChildren().add(heartsUI);
-
-                gameLoop = new GameLoop(stage3); 
-                gameLoop.start();
+                setupStage(stage3);
                 break;
 
-            case 4:
+            case 4: // Game Over
                 GameOverPage gameOverPage = new GameOverPage(this);
                 scene = new Scene(gameOverPage, GameStage.WIDTH, GameStage.HEIGHT);
                 window.setScene(scene);
-
                 break;
-
-            default:
-                throw new IllegalArgumentException("Invalid stage number: " + num);
         }
     }
 
-    public int getCurrentStage() {
-        return currentStage;
-    }
-    public HeartsUI getHeartsUI() {
-        return heartsUI;
-    }public GameCharacter getPlayer() { return player; }
+    private void setupStage(GameStage stage) {
+        scene = new Scene(stage, GameStage.WIDTH, GameStage.HEIGHT);
+        window.setScene(scene);
 
+        stage.getKeys().clear();
+        scene.setOnKeyPressed(e -> stage.getKeys().add(e.getCode()));
+        scene.setOnKeyReleased(e -> stage.getKeys().remove(e.getCode()));
+
+        stage.addPlayer(player);
+        stage.getChildren().add(heartsUI);
+        stage.getChildren().add(sessionScoreUI);
+
+        gameLoop = new GameLoop(stage);
+        gameLoop.start();
+    }
+
+    public int getCurrentStage() { return currentStage; }
+    public HeartsUI getHeartsUI() { return heartsUI; }
+    public GameCharacter getPlayer() { return player; }
+    public int getTotalScore() { return player != null ? player.getTotalScore() : 0; }
+    public SessionScoreUI getScoreUI() { return sessionScoreUI; }
 }

@@ -9,6 +9,7 @@ import se233.project2.model.FlyingMinion;
 import se233.project2.model.GameCharacter;
 import se233.project2.model.Minion;
 import se233.project2.view.GameStage;
+import se233.project2.view.Score;
 
 import java.util.List;
 
@@ -69,6 +70,15 @@ public class GameLoop {
         for (Minion m : gameStage.getMinions()) {
             if (m.isAlive()) m.update();
         }
+        for (Score s : gameStage.getScoreList()) {
+            s.setPoint(gameStage.getGameCharacterList().get(0).getScore());
+        }
+        StageManager sm = gameStage.getGameCharacterList().get(0).getStageManager();
+        if (sm.getScoreUI() != null) {
+            sm.getScoreUI().update(gameStage.getGameCharacterList().get(0).getSessionScore());
+        }
+
+
 //        if (gameStage.getBoss() != null) {
 //            gameStage.getBoss().update();
 //        }
