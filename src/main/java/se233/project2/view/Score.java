@@ -5,8 +5,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Score extends Pane {
+    private static final Logger scoreLogger = LogManager.getLogger("ScoreLogger");
+
     Label point;
     public Score(int x, int y) {
         point = new Label("0");
@@ -18,5 +22,6 @@ public class Score extends Pane {
     }
     public void setPoint(int score) {
         this.point.setText(Integer.toString(score));
+        scoreLogger.info("Score updated: {}", score);
     }
 }

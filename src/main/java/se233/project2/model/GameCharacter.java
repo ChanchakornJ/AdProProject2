@@ -21,7 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class GameCharacter extends Pane {
-    private static final Logger logger = LogManager.getLogger(GameCharacter.class);
+    private static final Logger actionLogger = LogManager.getLogger("ActionLogger");
+  private static final Logger logger = LogManager.getLogger(GameCharacter.class);
     private List<Platform> platforms;
     private Image characterImg;
     private AnimatedSprite imageView;
@@ -87,11 +88,14 @@ public class GameCharacter extends Pane {
         setScaleX(-1);
         isMoveLeft = true;
         isMoveRight = false;
+        actionLogger.info("Character starts moving left at x={}, y={}", x, y);
     }
     public void moveRight() {
         setScaleX(1);
         isMoveLeft = false;
         isMoveRight = true;
+        actionLogger.info("Character starts moving right at x={}, y={}", x, y);
+
     }
     public void stop() {
         isMoveLeft = false;
@@ -110,10 +114,6 @@ public class GameCharacter extends Pane {
         }
         setTranslateX(x);
     }
-
-
-
-
 
     public void moveY() {
         setTranslateY(y);
@@ -138,7 +138,7 @@ public class GameCharacter extends Pane {
             canJump = false;
             isJumping = true;
             isFalling = false;
-            System.out.println("Jump started!");
+            actionLogger.debug("Character jumped at x={}, y={}", x, y);
 
         }
     }
@@ -333,6 +333,8 @@ public class GameCharacter extends Pane {
         double startX = getTranslateX() + (facingRight ? characterWidth : 0);
         double startY = getTranslateY() + characterHeight / 2.0;
         bulletManager.shoot(startX, startY, facingRight, true);
+        actionLogger.warn("Character shoot at x={}, y={}", x, y);
+
     }
 
 
