@@ -109,7 +109,7 @@ public class GameLoop {
             if (m.isAlive()) m.update();
         }
 
-        if (gameStage.getStageNumber() == 3) {
+        if (gameStage.getStageNumber() == 3 || gameStage.getStageNumber() == 2 ) {
             long flyingCount = gameStage.getMinions()
                     .stream()
                     .filter(m -> m instanceof FlyingMinion && m.isAlive())
