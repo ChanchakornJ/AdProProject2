@@ -15,7 +15,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class ExceptionHandler {
+public class ExceptionHandler  {
 
     public static void handleException(Exception e) {
         e.printStackTrace();

@@ -49,7 +49,7 @@ public class GameCharacter extends Pane {
     boolean isFalling = true;
     public boolean isShooting = false;
     boolean canJump = false;
-    boolean canProne = false;
+    public boolean canProne = false;
     public boolean isJumping = false;
     public boolean isProne = false;
     private int lastX;
@@ -106,6 +106,8 @@ public class GameCharacter extends Pane {
         isMoveLeft = false;
         isMoveRight = false;
         xVelocity = 0;
+        this.canProne = true;
+
     }
 
     public void moveX() {
@@ -137,24 +139,25 @@ public class GameCharacter extends Pane {
     }
 
     public void jump() {
-        System.out.println("Trying to jump. canJump=" + canJump + ", isJumping=" + isJumping);
         if (canJump) {
             yVelocity = yMaxVelocity;
             canJump = false;
             isJumping = true;
             isFalling = false;
-            actionLogger.debug("Character jumped at x={}, y={}", x, y);
-
+            isProne = false;
+            canProne = false;
         }
     }
+
     public void prone(){
         if (canProne){
-            xVelocity = 0;
-            canJump = false;
             isProne = true;
-
+            isMoveLeft = false;
+            isMoveRight = false;
+            xVelocity = 0;
         }
     }
+
     public void checkReachHighest () {
         if(isJumping && yVelocity <= 0) {
             isJumping = false;
@@ -168,8 +171,10 @@ public class GameCharacter extends Pane {
             isFalling = false;
             canJump = true;
             yVelocity = 0;
-        }
+
+            canProne = !isJumping && !isFalling;        }
     }
+
     public void checkPlatforms(List<Platform> platforms) {
         if (platforms == null) return;
         boolean onSomething = false;

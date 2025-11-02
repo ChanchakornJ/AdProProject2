@@ -99,6 +99,13 @@ public class StageManager {
         stage.getKeys().clear();
         scene.setOnKeyPressed(e -> stage.getKeys().add(e.getCode()));
         scene.setOnKeyReleased(e -> stage.getKeys().remove(e.getCode()));
+        scene.setOnKeyReleased(e -> {
+            stage.getKeys().remove(e.getCode());
+            if (e.getCode() == player.getDownKey()) {
+                player.isProne = false;
+                player.canProne = false;
+            }
+        });
 
         stage.addPlayer(player);
         stage.getChildren().add(heartsUI);

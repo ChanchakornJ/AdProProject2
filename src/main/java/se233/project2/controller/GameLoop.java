@@ -58,14 +58,18 @@ public class GameLoop {
             if (left) c.setFacingRight(false);
             if (right) c.setFacingRight(true);
             if (shoot) c.shoot();
-            if (down) c.prone();
+            if (down) {
+                c.prone();
+            } else {
+                c.isProne = false;
+            }
         }
 
         gameStage.getBulletManager().update();
 
         Boss boss = gameStage.getBoss();
         if (boss != null && boss.isAlive()) {
-            boss.update(); // pass in timestamp for animation
+            boss.update();
         }
 
 
