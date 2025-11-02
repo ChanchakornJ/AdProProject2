@@ -84,6 +84,12 @@ public class StageManager {
                 setupStage(stage3);
                 break;
 
+            case 4: // Game Win
+                GameWinPage gameWinPage = new GameWinPage(this);
+                scene = new Scene(gameWinPage, GameStage.WIDTH, GameStage.HEIGHT);
+                window.setScene(scene);
+                break;
+
             case 5: // Game Over
                 GameOverPage gameOverPage = new GameOverPage(this);
                 scene = new Scene(gameOverPage, GameStage.WIDTH, GameStage.HEIGHT);
