@@ -1,6 +1,4 @@
-package se233.project2.view;
-
-import se233.project2.Launcher;
+package se233.project2;
 
 public class JARLauncher {
     public static void main(String[] args) {
