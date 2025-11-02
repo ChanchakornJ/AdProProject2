@@ -72,7 +72,7 @@ public class StageManager {
                 setupStage(stage2);
                 break;
 
-            case 3: // Stage 3 (same logic)
+            case 3: 
                 if (gameLoop != null) gameLoop.stop();
 
                 GameStage stage3 = GameStage.stage3();
@@ -84,7 +84,7 @@ public class StageManager {
                 setupStage(stage3);
                 break;
 
-            case 4: // Game Over
+            case 4:
                 GameOverPage gameOverPage = new GameOverPage(this);
                 scene = new Scene(gameOverPage, GameStage.WIDTH, GameStage.HEIGHT);
                 window.setScene(scene);
