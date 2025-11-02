@@ -195,7 +195,7 @@ public class GameCharacter extends Pane {
         checkReachGameWall();
         trace();
     }
-    public boolean collided(GameCharacter c) {
+    public boolean collided(GameCharacter c) throws CustomException {
         if (this == c) return false;
 
         if (this.isMoveLeft && this.x > c.getX()) {
@@ -218,7 +218,7 @@ public class GameCharacter extends Pane {
     }
 
 
-    public void collapsed() {
+    public void collapsed() throws CustomException {
         this.imageView.setFitWidth((int) (this.getWidth() * 2));
         this.imageView.setFitHeight((int) (this.getHeight() * 2));
         this.y = 5;
@@ -227,7 +227,7 @@ public class GameCharacter extends Pane {
         try {
             TimeUnit.MILLISECONDS.sleep(300);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new CustomException("Sleep was interrupted.", e);
         }
     }
 
