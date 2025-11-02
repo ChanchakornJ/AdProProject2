@@ -170,6 +170,10 @@ public class GameLoop {
 
                 if (bulletBox.intersects(part.getBox())) {
                     part.takeHit();
+                    double effectX = bullet.getX() + bullet.getFitWidth() / 2;
+                    double effectY = bullet.getY() + bullet.getFitHeight() / 2;
+                    boss.showHitEffect(gameStage, effectX, effectY);
+
                     gameStage.getBulletManager().removeBullet(bullet);
 
                     if (part.isDestroyed()) {
@@ -181,6 +185,7 @@ public class GameLoop {
             }
         }
     }
+
 
 
     private void checkBulletMinionCollision(GameStage gameStage) {

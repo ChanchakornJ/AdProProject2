@@ -1,12 +1,8 @@
 package se233.project2;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import se233.project2.controller.GameLoop;
 import se233.project2.controller.StageManager;
-import se233.project2.model.Boss;
-import se233.project2.view.GameStage;
 
 public class Launcher extends Application {
     public static void main(String[] args) {
@@ -34,7 +30,7 @@ public class Launcher extends Application {
 //    }
 
 @Override
-public void start(Stage primaryStage) {
+public void start(Stage primaryStage){
     StageManager stageManager = new StageManager(primaryStage);
     stageManager.loadStage(0); // start from menu now
     primaryStage.setTitle("Contra Game");

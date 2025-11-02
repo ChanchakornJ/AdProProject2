@@ -16,7 +16,7 @@ public class StageManager {
         this.window = window;
     }
 
-    public void loadStage(int num) {
+    public void loadStage(int num){
         currentStage = num;
         switch (num) {
             case 0: // Menu page

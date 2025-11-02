@@ -195,7 +195,7 @@ public class GameCharacter extends Pane {
         checkReachGameWall();
         trace();
     }
-    public boolean collided(GameCharacter c) throws CustomException {
+    public boolean collided(GameCharacter c) {
         if (this == c) return false;
 
         if (this.isMoveLeft && this.x > c.getX()) {
@@ -218,7 +218,7 @@ public class GameCharacter extends Pane {
     }
 
 
-    public void collapsed() throws CustomException {
+    public void collapsed() {
         this.imageView.setFitWidth((int) (this.getWidth() * 2));
         this.imageView.setFitHeight((int) (this.getHeight() * 2));
         this.y = 5;
@@ -351,15 +351,15 @@ public class GameCharacter extends Pane {
 //        }
 //    }
 
-    public void takeDamage() {
-        if (isGameOver) return; // ถ้าเกมจบแล้ว ไม่ทำอะไรต่อ
+    public void takeDamage(){
+        if (isGameOver) return;
 
         hp--;
         if (hp <= 0) {
             lives--;
             if(lives <= 0){
                 stageManager.loadStage(4);
-                isGameOver = true; // ตั้ง flag ว่าเกมจบแล้ว
+                isGameOver = true;
                 return;
             }
             hp = 5;

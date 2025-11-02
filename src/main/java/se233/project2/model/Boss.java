@@ -203,13 +203,27 @@ public class Boss extends Pane {
         return hitParts.stream().allMatch(p -> p.destroyed);
     }
 
+    public void showHitEffect(Pane root, double x, double y) {
+        Image spriteSheet = new Image(Launcher.class.getResourceAsStream("assets/hit_effect.png"));
 
+        int frameWidth = 64;   // ความกว้างต่อเฟรม
+        int frameHeight = 64;  // ความสูงต่อเฟรม
 
+        ImageView effect = new ImageView(spriteSheet);
+        effect.setTranslateX(x - frameWidth / 2.0);
+        effect.setTranslateY(y - frameHeight / 2.0);
+        effect.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
 
+        root.getChildren().add(effect);
 
-
-
-
+        Timeline anim = new Timeline(
+                new KeyFrame(Duration.millis(0), e -> effect.setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight))),
+                new KeyFrame(Duration.millis(80), e -> effect.setViewport(new Rectangle2D(frameWidth, 0, frameWidth, frameHeight))),
+                new KeyFrame(Duration.millis(160), e -> effect.setViewport(new Rectangle2D(frameWidth * 2, 0, frameWidth, frameHeight))),
+                new KeyFrame(Duration.millis(240), e -> root.getChildren().remove(effect))
+        );
+        anim.play();
+    }
 
     public void takeDamage() {
         if (allHitPartsDestroyed()) {
