@@ -7,13 +7,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import se233.project2.Launcher;
-import se233.project2.controller.StageManager;
 
-public class GameOverPage extends StackPane {
+public class GameWinPage extends StackPane {
     private Font arcadeFont;
 
-    public GameOverPage(StageManager stageManager) {
-
+    public GameWinPage() {
         setPrefSize(GameStage.WIDTH, GameStage.HEIGHT);
 
         arcadeFont = Font.loadFont(getClass().getResourceAsStream("/se233/project2/assets/PressStart2P-Regular.ttf"), 24);
@@ -44,12 +42,12 @@ public class GameOverPage extends StackPane {
         getChildren().add(overlay);
 
         // Title
-        Text title = new Text("GAME OVER!");
+        Text title = new Text("YOU WIN!");
         title.setFont(Font.font(arcadeFont.getFamily(), 48));
         title.setFill(Color.ORANGE);
-        Text text = new Text("You lost all 3 lives.");
+        Text text = new Text("You passed all 3 stages.");
         text.setFont(Font.font(arcadeFont.getFamily(), 30));
         text.setFill(Color.ORANGE);
 
     }
-}
+    }

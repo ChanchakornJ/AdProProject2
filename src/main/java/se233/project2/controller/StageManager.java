@@ -2,6 +2,7 @@ package se233.project2.controller;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import se233.project2.view.GameOverPage;
 import se233.project2.view.GameStage;
 import se233.project2.view.MenuPage;
 
@@ -47,6 +48,12 @@ public class StageManager {
                 scene.setOnKeyReleased(event -> stage3.getKeys().remove(event.getCode()));
                 window.setScene(scene);
                 new GameLoop(stage3).start();
+                break;
+
+            case 4:
+                GameOverPage gameOverPage = new GameOverPage(this);
+                scene = new Scene(gameOverPage, GameStage.WIDTH, GameStage.HEIGHT);
+                window.setScene(scene);
                 break;
 
             default:

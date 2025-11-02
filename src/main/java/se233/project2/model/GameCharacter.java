@@ -341,6 +341,7 @@ public class GameCharacter extends Pane {
         if (hp <= 0) {
             lives--;
             if(lives <=0){
+                stageManager.loadStage(4);
                 stageManager.loadStage(0);
                 return;
             }
