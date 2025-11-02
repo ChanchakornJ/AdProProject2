@@ -210,11 +210,12 @@ public class Boss extends Pane {
         explosion.setViewport(frames[0]);
 
         explosion.setPreserveRatio(true);
-        explosion.setFitWidth(frames[0].getWidth() * 30);   // 2 เท่าของเฟรม
-        explosion.setFitHeight(frames[0].getHeight() * 30);
+        explosion.setFitWidth(frames[0].getWidth() * 12);   // 2 เท่าของเฟรม
+        explosion.setFitHeight(frames[0].getHeight() * 12);
 
         explosion.setX(box.getMinX() + (box.getWidth() / 2) - (explosion.getFitWidth() / 2));
         explosion.setY(box.getMinY() + (box.getHeight() / 2) - (explosion.getFitHeight() / 2));
+//        explosion.setY(box.getMinY() - 50); // ยกขึ้น 50 px จากขอบบนของ box
 
         Pane root = (Pane) getParent();
         root.getChildren().add(explosion);
