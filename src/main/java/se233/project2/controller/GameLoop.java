@@ -128,7 +128,7 @@ public class GameLoop {
 
         // Add to the minion list and scene
         gameStage.getMinions().add(fm);
-        ((Pane) gameStage.getScene().getRoot()).getChildren().add(fm.getImageView());
+        gameStage.getChildren().add(fm);
     }
 
 
