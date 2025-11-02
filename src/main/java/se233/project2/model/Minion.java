@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import se233.project2.Launcher;
 import se233.project2.controller.BulletManager;
+import se233.project2.view.GameStage;
 
 public class Minion extends Pane {
     private double x, y, w, h, speed;
@@ -94,7 +95,15 @@ public class Minion extends Pane {
 
     public void takeDamage() {
         hp--;
-        if (hp <= 0) die();
+
+        if (hp <= 0){
+            GameStage stage = (GameStage) getParent();
+            GameCharacter player = stage.getGameCharacterList().get(0);
+            player.addScore(10);
+            die();
+        }
+
+
     }
 
     private void die() {

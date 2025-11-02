@@ -48,6 +48,7 @@ public class Boss extends Pane {
 
 
 
+
     public Boss(double x, double y, double w, double h, double speed, int hp,
                 String imgName, BulletManager bulletManager, String pathwayImage) {
 
@@ -106,9 +107,15 @@ public class Boss extends Pane {
         }
 
         if (alive && allHitPartsDestroyed()) {
+            GameStage stage = (GameStage) getParent();
+            GameCharacter player = stage.getGameCharacterList().get(0);
+            player.addScore(100);
+            
+
             die();
             return;
         }
+
 
 
     }
@@ -227,9 +234,14 @@ public class Boss extends Pane {
 
     public void takeDamage() {
         if (allHitPartsDestroyed()) {
-            hp--;
-            if (hp <= 0) die();
-        }
+
+                GameStage stage = (GameStage) getParent();
+                GameCharacter player = stage.getGameCharacterList().get(0);
+                player.addScore(100);
+                player.addSessionScore(100);
+
+                die();}
+
     }
 
     public void die() {

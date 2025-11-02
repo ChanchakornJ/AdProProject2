@@ -3,6 +3,7 @@ package se233.project2.view;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -37,6 +38,8 @@ public class MenuPage extends StackPane {
             bg.setFitHeight(GameStage.HEIGHT);
             bg.setStyle("-fx-background-color: #222222;");
             getChildren().add(bg);
+
+
 
         } catch (Exception e) {
             throw new RuntimeException("Background image unavailable.");
@@ -87,9 +90,11 @@ public class MenuPage extends StackPane {
         exitBtn.setOnAction(e -> System.exit(0));
         stage2Btn.setOnAction(e -> stageManager.loadStage(2));
         stage3Btn.setOnAction(e -> stageManager.loadStage(3));
-
+        Label totalScoreLabel = new Label("Total Score: " + stageManager.getPlayer().getTotalScore());
+        totalScoreLabel.setTextFill(Color.WHITE);
+        getChildren().add(totalScoreLabel);
         // Layout
-        VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, stage2Btn, stage3Btn);
+        VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, stage2Btn, stage3Btn, totalScoreLabel);
         vbox.setAlignment(Pos.CENTER);
 
         getChildren().add(vbox);
