@@ -58,13 +58,12 @@ public class GameCharacter extends Pane {
     private int lives = 3;
     private boolean isGameOver = false;
 
-    //Bullet
     private List<Bullet> bullets = new ArrayList<>();
     private double bulletSpeed = 5.0;
     private boolean facingRight = true;
     private BulletManager bulletManager;
     private long lastShotTime = 0;
-    private static final long SHOOT_COOLDOWN = 200_000_000; // 0.1 second = 100 million nanoseconds
+    private static final long SHOOT_COOLDOWN = 200_000_000;
 
 
 
@@ -393,19 +392,7 @@ public class GameCharacter extends Pane {
     public void setFacingRight(boolean facingRight) {
         this.facingRight = facingRight;
     }
-//    public void takeDamage() {
-//
-//        hp--;
-//        if (hp <= 0) {
-//            lives--;
-//            if(lives <=0){
-//                stageManager.loadStage(4);
-//                return;
-//            }
-//            hp = 5;
-//            respawn();
-//        }
-//    }
+
 
     public void takeDamage() {
         if (isGameOver) return;
@@ -423,7 +410,7 @@ public class GameCharacter extends Pane {
                 return;
             }
 
-            hp = 5;
+            hp = 1;
             respawn();
         }
     }
@@ -549,7 +536,7 @@ public class GameCharacter extends Pane {
 
     public void playShoot() {
         if (currentState != AnimState.SHOOT) {
-            imageView.setAnimation(6, 0, 2);
+            imageView.setAnimation(7, 0, 3);
             currentState = AnimState.SHOOT;
         }
     }

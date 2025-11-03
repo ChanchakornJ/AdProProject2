@@ -23,12 +23,11 @@ public class AnimatedSprite extends ImageView {
         setViewport(new Rectangle2D(0, 0, frameWidth, frameHeight));
     }
 
-    /** Call this when switching animation */
     public void setAnimation(int startColumn, int startRow, int frameCount) {
         this.startColumn = startColumn;
         this.startRow = startRow;
         this.frameCount = frameCount;
-        this.currentFrame = 0;   // reset frame
+        this.currentFrame = 0;
         updateViewport();
     }
 

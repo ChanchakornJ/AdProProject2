@@ -24,4 +24,8 @@ public class Score extends Pane {
         this.point.setText(Integer.toString(score));
         scoreLogger.info("Score updated: {}", score);
     }
+    public Label getLabel() {
+        return point;
+    }
+
 }

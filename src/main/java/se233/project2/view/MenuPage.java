@@ -26,7 +26,6 @@ public class MenuPage extends StackPane {
         if (arcadeFont == null) {
             arcadeFont = Font.font("Impact", 24);
         }
-        // Background
         Image bgImage;
         try {
             bgImage = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
@@ -48,23 +47,20 @@ public class MenuPage extends StackPane {
 
 
         StackPane overlay = new StackPane();
-        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6);"); // 60% black overlay
+        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6);");
         overlay.setPrefSize(GameStage.WIDTH, GameStage.HEIGHT);
         getChildren().add(overlay);
 
-        // Title
         Text title = new Text("CONTRA");
         title.setFont(Font.font(arcadeFont.getFamily(), 48));
         title.setFill(Color.ORANGE);
 
-        // Buttons
         Button startBtn = new Button("Start Game");
         Button helpBtn = new Button("How to Play");
         Button exitBtn = new Button("Exit");
         Button stage2Btn = new Button("Stage 2");
         Button stage3Btn = new Button("Stage 3");
 
-        // Style
         for (Button btn : new Button[]{startBtn, helpBtn, exitBtn, stage2Btn, stage3Btn}) {
             btn.setFont(Font.font(arcadeFont.getFamily(), 18));
             btn.setStyle(
@@ -85,7 +81,6 @@ public class MenuPage extends StackPane {
             ));
         }
 
-        // Button actions
         startBtn.setOnAction(e -> stageManager.loadStage(1));
         helpBtn.setOnAction(e -> showHelpPopup());
         exitBtn.setOnAction(e -> System.exit(0));
@@ -94,7 +89,6 @@ public class MenuPage extends StackPane {
         Label totalScoreLabel = new Label("Total Score: " + stageManager.getPlayer().getTotalScore());
         totalScoreLabel.setTextFill(Color.WHITE);
         getChildren().add(totalScoreLabel);
-        // Layout
         VBox vbox = new VBox(20, title, startBtn, helpBtn, exitBtn, totalScoreLabel);
         vbox.setAlignment(Pos.CENTER);
 

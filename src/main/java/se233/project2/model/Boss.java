@@ -214,7 +214,6 @@ public class Boss extends Pane {
 
         explosion.setX(box.getMinX() + (box.getWidth() / 2) - (explosion.getFitWidth() / 2));
         explosion.setY(box.getMinY() + (box.getHeight() / 2) - (explosion.getFitHeight() / 2));
-//        explosion.setY(box.getMinY() - 50); // ยกขึ้น 50 px จากขอบบนของ box
 
         Pane root = (Pane) getParent();
         root.getChildren().add(explosion);
@@ -248,7 +247,7 @@ public class Boss extends Pane {
     public void showHitEffect(Pane root, double x, double y) {
         Image spriteSheet = new Image(Launcher.class.getResourceAsStream("assets/shootEffect.png"));
 
-        int totalFrames = 3; // มี 3 เฟรมในแนวนอน
+        int totalFrames = 3;
         double frameWidth = spriteSheet.getWidth() / totalFrames;
         double frameHeight = spriteSheet.getHeight();
 

@@ -100,12 +100,6 @@ public class GameStage extends Pane {
         stage.getMinions().add(new Minion(500, 100, 40, 40, 1.5, 3, "assets/Minion1.png", stage.bulletManager));
         stage.getChildren().addAll(stage.getMinions());
 
-        // Player
-//
-//        player.setPlatforms(stage.getPlatforms());
-//        player.setBulletManager(stage.bulletManager);
-//        stage.getGameCharacterList().add(player);
-//        stage.getChildren().add(player);
 
 
         // Score positions
@@ -187,10 +181,9 @@ public class GameStage extends Pane {
 
         stage.getChildren().add(stage.boss);
 
-        // Player
 
 
-// add hearts
+
 
 
 
