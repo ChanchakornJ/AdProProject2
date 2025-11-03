@@ -39,7 +39,7 @@ public class DrawingLoop {
 
     private void paint(List<GameCharacter> list) {
         for (GameCharacter g : list) {
-            g.repaint(); // safe — same thread as UI
+            g.repaint();
         }
     }
 }

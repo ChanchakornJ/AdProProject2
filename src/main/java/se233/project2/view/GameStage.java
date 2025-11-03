@@ -149,18 +149,7 @@ public class GameStage extends Pane {
         stage.boss.addHitPart(0.1, 0.1, 0.9, 0.8, 10);
         stage.boss.toFront();
 
-//
-//        // Player
-//        GameCharacter player = new GameCharacter(
-//                0, 30, 30,
-//                "assets/Character.png",
-//                6, 6, 1, 65, 64,
-//                KeyCode.LEFT, KeyCode.RIGHT, KeyCode.UP, KeyCode.SPACE
-//        );
-//        player.setPlatforms(stage.getPlatforms());
-//        player.setBulletManager(stage.bulletManager);
-//        stage.getGameCharacterList().add(player);
-//        stage.getChildren().add(player);
+
 
         return stage;
     }
@@ -169,9 +158,7 @@ public class GameStage extends Pane {
         GameStage stage = new GameStage();
         stage.setStageNumber(3);
 
-        // Platforms for stage2 (can be different)
         stage.getPlatforms().add(new Platform(0, 275, 500, 100)); // ground
-        // add more if needed
 
         // Draw platforms
         for (Platform p : stage.getPlatforms()) {

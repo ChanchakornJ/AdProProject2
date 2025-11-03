@@ -68,10 +68,10 @@ public class FlyingMinion extends Minion {
         angle += 0.1;
         y = baseY + Math.sin(angle) * amplitude;
 
-        // ถ้าออกจอซ้าย → วนกลับขวาใหม่
+
         if (x < -w) {
-            x = 800 + Math.random() * 200; // เริ่มใหม่ทางขวา
-            baseY = 100 + Math.random() * 200; // random ความสูง
+            x = 800 + Math.random() * 200;
+            baseY = 100 + Math.random() * 200;
             y = baseY;
         }
 
@@ -79,42 +79,6 @@ public class FlyingMinion extends Minion {
         setTranslateY(y);
         animate();
     }
-
-
-//    public void update() {
-//        if (!alive) return;
-//
-//        // เคลื่อนที่แบบสุ่ม (bounce when hitting boundaries)
-//        x += vx;
-//        y += vy;
-//
-//        if (x < 0 || x + w > 800) vx = -vx; // bounce X
-//        if (y < 0 || y + h > 400) vy = -vy; // bounce Y
-//
-//        setTranslateX(x);
-//        setTranslateY(y);
-//
-//        // Animate sprite sheet
-//        animate();
-//    }
-
-
-//    private void animate() {
-//        if (frameWidth == 0 || frameHeight == 0) {
-//            frameWidth = image.getWidth() / totalCols;
-//            frameHeight = image.getHeight() / totalRows;
-//        }
-//
-//        long now = System.currentTimeMillis();
-//        if (now - lastFrameTime < frameDelay) return;
-//        lastFrameTime = now;
-//
-//        frame = (frame + 1) % totalCols; // loop through frames
-//        int col = frame % totalCols;
-//        int row = frame / totalCols;
-//
-//        sprite.setViewport(new Rectangle2D(col * frameWidth, row * frameHeight, frameWidth, frameHeight));
-//    }
 
 
 

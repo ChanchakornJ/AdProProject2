@@ -188,13 +188,11 @@ public class GameCharacter extends Pane {
         for (Platform p : platforms) {
             if (platforms == null) return;
             if (isJumping) return;
-            // ถ้าตัวละครอยู่เหนือ platform และกำลังตกลงมา
             if (this.y + this.characterHeight <= p.getY() &&
                     this.y + this.characterHeight + yVelocity >= p.getY() &&
                     this.x + this.characterWidth > p.getX() &&
                     this.x < p.getX() + p.getWidth()) {
 
-                // วางตัวละครไว้บน platform
                 this.y = p.getY() - this.characterHeight;
                 this.isFalling = false;
                 this.canJump = true;
