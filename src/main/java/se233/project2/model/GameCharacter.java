@@ -54,7 +54,7 @@ public class GameCharacter extends Pane {
     public boolean isProne = false;
     private int lastX;
     private int lastY;
-    private int hp = 5;
+    private int hp = 1;
     private int lives = 3;
     private boolean isGameOver = false;
 
