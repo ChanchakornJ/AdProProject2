@@ -413,19 +413,16 @@ public class PlayerTest {
 
     @Test
     void testShootCooldown() throws InterruptedException {
-        // first shot
+
         gameCharacter.shoot();
 
-        // immediately shoot again
         gameCharacter.shoot();
 
-        // should only have one bullet due to cooldown
         assertEquals(1, bulletManager.getBullets().size(), "Cooldown should prevent rapid fire");
 
         Thread.sleep(gameCharacter.getShootCooldown() / 1_000_000 + 1); // nano to millis
         gameCharacter.shoot();
 
-        // now there should be two bullets
         assertEquals(2, bulletManager.getBullets().size(), "Bullet should be added after cooldown");
     }
 }
