@@ -23,7 +23,6 @@ public class GameWinPage extends StackPane {
         if (arcadeFont == null) {
             arcadeFont = Font.font("Impact", 24);
         }
-        // Background
         Image bgImage;
         try {
             bgImage = new Image(Launcher.class.getResourceAsStream("assets/Stage1.png"));
@@ -42,11 +41,11 @@ public class GameWinPage extends StackPane {
         }
 
         StackPane overlay = new StackPane();
-        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6);"); // 60% black overlay
+        overlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6);");
         overlay.setPrefSize(GameStage.WIDTH, GameStage.HEIGHT);
         getChildren().add(overlay);
 
-        // Title
+
         Text title = new Text("YOU WIN!");
         title.setFont(Font.font(arcadeFont.getFamily(), 48));
         title.setFill(Color.ORANGE);

@@ -34,7 +34,6 @@ public class ExceptionHandler  {
             if (throwable instanceof Exception e) {
                 handleException(e);
             } else {
-                // handle Throwable (rare cases)
                 throwable.printStackTrace();
             }
         });

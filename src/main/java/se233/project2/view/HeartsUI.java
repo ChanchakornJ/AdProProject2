@@ -12,14 +12,14 @@ public class HeartsUI extends Pane {
     private final List<ImageView> hearts = new ArrayList<>();
 
     public HeartsUI(int lives) {
-        Image img = new Image(Launcher.class.getResourceAsStream("assets/heart.png"));
+        Image img = new Image(Launcher.class.getResourceAsStream("assets/Heart.png"));
 
         for (int i = 0; i < lives; i++) {
             ImageView heart = new ImageView(img);
             heart.setFitWidth(35);
             heart.setFitHeight(35);
-            heart.setTranslateX(20 + (i * 40)); // space between hearts
-            heart.setTranslateY(350); // bottom of screen
+            heart.setTranslateX(20 + (i * 40));
+            heart.setTranslateY(350);
             hearts.add(heart);
             getChildren().add(heart);
         }

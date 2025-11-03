@@ -85,9 +85,7 @@ public class GameLoop {
         }
 
 
-//        if (gameStage.getBoss() != null) {
-//            gameStage.getBoss().update();
-//        }
+
 
         if (!minionSpawned && !gameStage.getBulletManager().getBullets().isEmpty()) {
             for (Minion m : gameStage.getMinions()) {
@@ -104,7 +102,6 @@ public class GameLoop {
 //            }
 //        }
 
-        // Update all existing minions
         for (Minion m : gameStage.getMinions()) {
             if (m.isAlive()) m.update();
         }
@@ -192,7 +189,6 @@ public class GameLoop {
                     if (part.isDestroyed()) {
                         boss.explodeAt(part.getBox());
                     }
-                    boss.takeDamage();
                     return;
                 }
             }
